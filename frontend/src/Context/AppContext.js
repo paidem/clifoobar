@@ -26,11 +26,14 @@ const AppProvider = (props) => {
 
         api.getCurrentUser()
             .then(r => {
-                setState(oldState => ({...oldState, apiError: null, user: r.data}));
+                setState(oldState => ({...oldState,
+                    apiError: null,
+                    user: r.data,
+                    userLoginFailed: false
+                }));
                 updateSnippets();
             })
             .catch(e => {
-                console.log(e)
                     if (!e.response) {
                         console.log("No response. Retries left: " + retriesLeft);
                         setState(oldState => ({
@@ -42,8 +45,11 @@ const AppProvider = (props) => {
                             setTimeout(() => checkLoginStatus(retriesLeft), 2000);
                         }
                     } else {
-                        setState(oldState => ({...oldState, apiError: null, user: null}));
-                        window.location.href = "/accounts/login/";
+                        setState(oldState => ({...oldState,
+                            apiError: null,
+                            user: null,
+                            userLoginFailed: true,
+                        }));
                     }
                 }
             )
@@ -54,6 +60,7 @@ const AppProvider = (props) => {
         snippets: [],
         snippetsLoading: false,
         user: null,
+        userLoginFailed: false,
         query: null,
         actions: {
             checkLoginStatus: checkLoginStatus,
