@@ -46,6 +46,11 @@ INSTALLED_APPS += [
     'rest_framework',
 ]
 
+# Custom apps
+INSTALLED_APPS += [
+    'cfb',
+]
+
 # Custom user model
 INSTALLED_APPS += [
     'users'
