@@ -39,6 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+# Community packages
+INSTALLED_APPS += [
+
+    # Django REST Framework
+    'rest_framework',
+]
 
 # Custom user model
 INSTALLED_APPS += [
