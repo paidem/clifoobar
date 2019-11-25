@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework import viewsets, status
 from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError, ParseError
 from rest_framework.permissions import IsAuthenticated, BasePermission, IsAdminUser
@@ -6,10 +7,11 @@ from cfb.models import Snippet
 from .serializers import UserSerializer, SnippetSerializer
 from users.models import User
 
-
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [IsAuthenticated]
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
 
     def dispatch(self, request, *args, **kwargs):
         if kwargs.get('pk') == 'current' and request.user:
@@ -42,7 +44,6 @@ class SnippetAccessPermission(BaseException):
 
 
 class SnippetViewSet(viewsets.ModelViewSet):
-    queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
     permission_classes = [SnippetAccessPermission]
 
@@ -51,3 +52,18 @@ class SnippetViewSet(viewsets.ModelViewSet):
         serializer.save(
             author=self.request.user,
         )
+
+    def get_queryset(self):
+        queryset = Snippet.objects.all()
+
+        q = self.request.query_params.get('q', None)
+        if q is not None:
+            terms = q.split(' ')
+            for term in terms:
+                queryset = self.add_contains_filter(queryset, term)
+
+        return queryset
+
+    @classmethod
+    def add_contains_filter(cls, queryset, term):
+        return queryset.filter(Q(name__contains=term) | Q(description__contains=term) | Q(body__contains=term))
