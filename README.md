@@ -1,0 +1,2 @@
+# clifoobar
+CLI snippet manager
