@@ -54,11 +54,12 @@ function Header() {
                     </Input>
                 </Grid.Column>
                 <Grid.Column computer={6}>
+                    {appState.user &&
                     <Button
                         onClick={() => appActions.openModal({type: SnippetModal, data: null})}
                     >
                         New
-                    </Button>
+                    </Button>}
                     {appState.user && <span style={{float: "right"}}>User: {appState.user.username}</span>}
                 </Grid.Column>
             </Grid>
