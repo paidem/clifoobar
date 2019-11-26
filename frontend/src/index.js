@@ -5,10 +5,13 @@ import './index.css';
 import App from "./Components/App/App";
 import * as serviceWorker from './serviceWorker';
 import {AppProvider} from "./Context/AppContext";
+import {ActionsProvider} from "./Context/ActionsContext";
 
 ReactDOM.render(
     <AppProvider>
-        <App/>
+        <ActionsProvider>
+            <App/>
+        </ActionsProvider>
     </AppProvider>
     , document.getElementById('root'));
 

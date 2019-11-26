@@ -50,8 +50,13 @@ export default class GuacadminApi {
         return this.apiInstance.get("/accounts/logout/", {baseURL: "/"})
     }
     
-    getSnippets({query}) {
-        let queryPart = query ? "?q=" + query : "";
+    getSnippets({query, page, page_size}) {
+        let queryPart = "?";
+        
+        queryPart += query ? "&q=" + query : "";
+        queryPart += "&page=" + page;
+        queryPart += "&page_size=" + page_size;
+
         return this.apiInstance.get("/snippets/" + queryPart);
     }
 

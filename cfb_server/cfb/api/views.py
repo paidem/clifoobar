@@ -1,17 +1,18 @@
 from django.db.models import Q
 from rest_framework import viewsets, status
 from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError, ParseError
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated, BasePermission, IsAdminUser
 
 from cfb.models import Snippet
 from .serializers import UserSerializer, SnippetSerializer
 from users.models import User
 
+
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
 
     def dispatch(self, request, *args, **kwargs):
         if kwargs.get('pk') == 'current' and request.user:
@@ -43,9 +44,16 @@ class SnippetAccessPermission(BaseException):
             return request.user.is_superuser or obj.author == request.user
 
 
+class SnippetViewSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+
 class SnippetViewSet(viewsets.ModelViewSet):
     serializer_class = SnippetSerializer
     permission_classes = [SnippetAccessPermission]
+    pagination_class = SnippetViewSetPagination
 
     # Override perform_create to set author
     def perform_create(self, serializer):

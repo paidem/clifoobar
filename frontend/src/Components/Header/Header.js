@@ -18,15 +18,14 @@ function Header() {
         setSearch(inputValue);
 
         updateAppQueryTimer.current = setTimeout(() => {
-            setAppState(state => ({...state, query: inputValue}));
-
+            setAppState(state => ({...state, snippetsQuery: inputValue}));
         }, 300)
 
     };
 
     const clearSearch = () => {
         setSearch("");
-        setAppState(state => ({...state, query: ""}));
+        setAppState(state => ({...state, snippetsQuery: ""}));
     };
 
     return (
