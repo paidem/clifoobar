@@ -60,11 +60,12 @@ export default class GuacadminApi {
         return this.apiInstance.get("/snippets/" + queryPart);
     }
 
-    createSnippet = ({name, description, body}) => {
+    createSnippet = ({name, description, body, language}) => {
         let bodyFormData = new FormData();
         bodyFormData.set('name', name);
         bodyFormData.set('description', description);
         bodyFormData.set('body', body);
+        bodyFormData.set('language', language);
         return this.apiInstance.post("/snippets/", bodyFormData);
     };
 }

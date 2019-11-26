@@ -16,8 +16,7 @@ function SnippetsList({items}) {
         <div>
             {items.map(item => <Snippet key={item.id} snippet={item}/>)}
             {(appState.snippetsTotal > appState.snippetsPageSize) &&
-            <Pagination defaultActivePage={1}
-                        firstItem={null}
+            <Pagination firstItem={null}
                         lastItem={{
                             'aria-label': 'Last item',
                             content: 'Last',

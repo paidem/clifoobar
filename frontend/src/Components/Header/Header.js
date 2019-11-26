@@ -1,10 +1,14 @@
 import React, {useContext, useEffect, useState, useRef} from 'react';
 import {AppContext} from "../../Context/AppContext";
-import {Container, Divider, Grid, Icon, Input, Segment} from "semantic-ui-react";
+import {ActionsContext} from "../../Context/ActionsContext";
+import {Button, Container, Divider, Grid, Icon, Input, Segment} from "semantic-ui-react";
+import SnippetModal from "../Modals/SnippetModal";
 
 function Header() {
     // Context
     const [appState, setAppState] = useContext(AppContext);
+    const [appActions,] = useContext(ActionsContext);
+
     const [search, setSearch] = useState("");
 
     // Timer which controls timeot for display size update
@@ -18,7 +22,7 @@ function Header() {
         setSearch(inputValue);
 
         updateAppQueryTimer.current = setTimeout(() => {
-            setAppState(state => ({...state, snippetsQuery: inputValue}));
+            setAppState(state => ({...state, snippetsQuery: inputValue, snippetsActivePage: 1}));
         }, 300)
 
     };
@@ -50,7 +54,11 @@ function Header() {
                     </Input>
                 </Grid.Column>
                 <Grid.Column computer={6}>
-
+                    <Button
+                        onClick={() => appActions.openModal({type: SnippetModal, data: null})}
+                    >
+                        New
+                    </Button>
                     {appState.user && <span style={{float: "right"}}>User: {appState.user.username}</span>}
                 </Grid.Column>
             </Grid>

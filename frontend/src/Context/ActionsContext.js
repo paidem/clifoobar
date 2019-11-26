@@ -26,7 +26,8 @@ const ActionsProvider = (props) => {
             .then(response => {
                     if (response.data.results) {
                         updateAppState({
-                            snippets: response.data.results.map(s => ({...s,
+                            snippets: response.data.results.map(s => ({
+                                ...s,
                                 created: new Date(s.created),
                                 language: s.language ? s.language.toLowerCase() : ""
                             })),
@@ -41,6 +42,10 @@ const ActionsProvider = (props) => {
             .finally(() => {
                 updateAppState({snippetsLoading: false});
             })
+    };
+
+    const createSnippet = (props) => {
+        return appState.api.createSnippet(props);
     };
 
     const checkLoginStatus = (retriesLeft) => {
@@ -79,9 +84,24 @@ const ActionsProvider = (props) => {
             )
     };
 
+    const openModal = ({type, data}) => {
+        let modal = React.createElement(type, props = {
+                data: data,
+                handleClose: () => {
+                    updateAppState({activeModal: null});
+                }
+            }
+        );
+
+        updateAppState({activeModal: modal});
+    };
+
+
     const defaultState = {
+        createSnippet: createSnippet,
         checkLoginStatus: checkLoginStatus,
         updateSnippets: updateSnippets,
+        openModal: openModal,
     };
 
     const [state, setState] = useState(defaultState);
