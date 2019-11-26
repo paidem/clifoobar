@@ -26,8 +26,11 @@ const ActionsProvider = (props) => {
             .then(response => {
                     if (response.data.results) {
                         updateAppState({
-                            snippets: response.data.results.map(s => ({...s, created: new Date(s.created)})),
-                            snippetsTotal: Math.ceil(response.data.count / appState.snippetsPageSize),
+                            snippets: response.data.results.map(s => ({...s,
+                                created: new Date(s.created),
+                                language: s.language ? s.language.toLowerCase() : ""
+                            })),
+                            snippetsTotal: response.data.count,
                         });
                     } else {
                         updateAppState({snippets: [], snippetsActivePage: 1});

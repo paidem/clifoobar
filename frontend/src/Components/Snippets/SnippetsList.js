@@ -15,7 +15,7 @@ function SnippetsList({items}) {
     return (
         <div>
             {items.map(item => <Snippet key={item.id} snippet={item}/>)}
-            {appState.snippetsTotal > appState.snippetsPageSize &&
+            {(appState.snippetsTotal > appState.snippetsPageSize) &&
             <Pagination defaultActivePage={1}
                         firstItem={null}
                         lastItem={{
@@ -25,7 +25,7 @@ function SnippetsList({items}) {
                         nextItem={null}
                         prevItem={null}
                         activePage={appState.snippetsActivePage}
-                        totalPages={appState.snippetsTotal}
+                        totalPages={Math.ceil(appState.snippetsTotal / appState.snippetsPageSize)}
                         onPageChange={handlePaginationChange}
             />}
         </div>
