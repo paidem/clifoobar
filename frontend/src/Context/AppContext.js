@@ -13,7 +13,8 @@ const AppProvider = (props) => {
         setState((state) => ({...state, snippetsLoading: true}));
         api.getSnippets({query: query})
             .then(r => {
-                    setState(state => ({...state, snippets: r.data}))
+                    let newSnippets = r.data.map(s => ({...s, created: new Date(s.created)}))
+                    setState(state => ({...state, snippets: newSnippets}))
                 }
             )
             .finally(() => {
