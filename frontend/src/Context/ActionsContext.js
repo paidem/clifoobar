@@ -59,7 +59,6 @@ const ActionsProvider = (props) => {
                     user: r.data,
                     userLoginFailed: false
                 }));
-                updateSnippets();
             })
             .catch(e => {
                     if (!e.response) {
