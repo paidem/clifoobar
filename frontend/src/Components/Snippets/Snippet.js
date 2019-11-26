@@ -1,5 +1,5 @@
-import React from 'react';
-import {Button, Card, Grid, Icon} from "semantic-ui-react";
+import React, {useState} from 'react';
+import {Button, Card, Grid, Label} from "semantic-ui-react";
 import Moment from 'react-moment';
 import 'moment-timezone';
 import SyntaxHighlighter from 'react-syntax-highlighter';
@@ -59,59 +59,75 @@ function getLineProps(snippet) {
     return null
 }
 
-const copyToClipboard = str => {
-  const el = document.createElement('textarea');
-  el.value = str;
-  document.body.appendChild(el);
-  el.select();
-  document.execCommand('copy');
-  document.body.removeChild(el);
-};
+
+const defaultCopyButtonIcon = 'copy outline';
+const successCopyButtonIcon = 'thumbs up';
 
 function Snippet({snippet}) {
+
+    const [copyButtonIcon, setCopyButtonIcon] = useState(defaultCopyButtonIcon);
+
+    const copyToClipboard = str => {
+        const el = document.createElement('textarea');
+        el.value = str;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+
+        setCopyButtonIcon(successCopyButtonIcon);
+        setTimeout(() => setCopyButtonIcon(defaultCopyButtonIcon),2000);
+
+    };
+
     return (
         <React.Fragment>
             <Card fluid raised>
-                <Card.Content>
-                    <span style={{float: "right"}}>
+                <Label size='large' attached='top'>{snippet.name}
+                  <span style={{float: "right"}}>Created&nbsp;
                         <Moment fromNow
                                 withTitle
                                 titleFormat="YYYY-MM-DD HH:mm"
                         >
                             {snippet.created}
-                        </Moment><strong>;&nbsp;{snippet.language}</strong>
+                        </Moment><strong>&nbsp;|&nbsp;{snippet.language}</strong>
                     </span>
-                    <Card.Header>
-                        {snippet.name}
-                    </Card.Header>
+                </Label>
 
+                <Card.Content>
                     <Card.Description>
-                        <Grid stackable divided>
-                            <Grid.Column computer={14}>
-                                {snippet.description}
-                                <SyntaxHighlighter
-                                    language={snippet.language ? snippet.language : "text"}
-                                    style={getStyle(snippet)}
-                                    showLineNumbers={showLineNumbers(snippet)}
-                                    wrapLines={true}
-                                    lineProps={getLineProps(snippet)}
-                                >
-                                    {snippet.body}
-                                </SyntaxHighlighter>
-                            </Grid.Column>
-                            <Grid.Column computer={2}>
-                                <Button basic color="green" size='small' animated='vertical'
-                                        onClick={() => copyToClipboard(snippet.body)}
-                                >
-                                    <Button.Content hidden>Copy</Button.Content>
-                                    <Button.Content visible>
-                                        <Icon name='copy outline'/>
-                                    </Button.Content>
-                                </Button>
-                            </Grid.Column>
+                        <Grid>
+                            <Grid.Row>
+                                <Grid.Column mobile={16} tablet={10} computer={14}>
+                                    <div className='snippetDescription'>
+                                    <code >{snippet.description}</code>
+                                    </div>
+                                </Grid.Column>
+                                <Grid.Column mobile={16} tablet={6} computer={2}>
+                                </Grid.Column>
+                            </Grid.Row>
+
+                            <Grid.Row>
+                                <Grid.Column mobile={16} tablet={13} computer={14}>
+                                    <SyntaxHighlighter
+                                        language={snippet.language ? snippet.language : "text"}
+                                        style={getStyle(snippet)}
+                                        showLineNumbers={showLineNumbers(snippet)}
+                                        wrapLines={true}
+                                        lineProps={getLineProps(snippet)}
+                                    >
+                                        {snippet.body}
+                                    </SyntaxHighlighter>
+                                </Grid.Column>
+                                <Grid.Column mobile={16} tablet={3} computer={2}>
+                                    <Button basic color="green" size='medium'
+                                            onClick={() => copyToClipboard(snippet.body)}
+                                            icon={copyButtonIcon}
+                                    />
+                                </Grid.Column>
+                            </Grid.Row>
                         </Grid>
                     </Card.Description>
-
                 </Card.Content>
             </Card>
         </React.Fragment>

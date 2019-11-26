@@ -16,3 +16,18 @@ body {
 .arrowSignPrompt:before {
   content:"> ";
 }
+
+pre {
+  margin: 0!important;
+}
+
+.ui.grid>.row {
+  padding-top: 0.2rem!important;
+  padding-bottom: 0.2rem!important;
+}
+
+.snippetDescription {
+  padding-top: .5rem!important;
+  padding-bottom: .3rem!important;
+  color: rgba(0,0,0,.8);
+}

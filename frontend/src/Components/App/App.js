@@ -14,10 +14,6 @@ function App() {
         appActions.checkLoginStatus(10);
     }, [appActions]);
 
-    // useEffect(() => {
-    //     appActions.updateSnippets({query: appState.query});
-    // }, [appActions, appState.query]);    
-    
     useEffect(() => {
         appActions.updateSnippets({
             query: appState.snippetsQuery,
