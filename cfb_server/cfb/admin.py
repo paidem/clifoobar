@@ -7,6 +7,6 @@ class SnippetModelAdmin(admin.ModelAdmin):
     model = Snippet
     readonly_fields = ('created',)
 
-    list_display = ('name', 'author', 'created',)
+    list_display = ('name', 'author', 'created', 'language')
 
     search_fields = ['name', 'description', 'body']

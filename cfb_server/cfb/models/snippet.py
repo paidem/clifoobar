@@ -15,6 +15,7 @@ class Snippet(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     body = models.TextField(blank=True)
+    language = models.CharField(max_length=20, null=True, blank=True)
 
     # TODO: Tags
     # TODO: Language selection

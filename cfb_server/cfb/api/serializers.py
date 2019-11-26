@@ -33,6 +33,6 @@ class UserShortSerializer(serializers.ModelSerializer):
 class SnippetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Snippet
-        fields = ['id', 'author', 'created', 'name', 'description', 'body']
+        fields = ['id', 'author', 'created', 'name', 'description', 'body','language']
 
         read_only_fields = ['created', 'author', ]
