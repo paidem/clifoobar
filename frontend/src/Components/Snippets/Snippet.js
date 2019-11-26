@@ -2,62 +2,7 @@ import React, {useState} from 'react';
 import {Button, Card, Grid, Label} from "semantic-ui-react";
 import Moment from 'react-moment';
 import 'moment-timezone';
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import {darcula, tomorrowNightBlue, agate} from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import {
-    noLineNumbersLanguages,
-    dollarSignPromptLanguages,
-    arrowSignPromptLanguages
-} from "../../Settings/SettingsArrays";
-
-function showLineNumbers(snippet) {
-    if (!snippet.language)
-        return false;
-    let lang = snippet.language.toLowerCase();
-
-    if (noLineNumbersLanguages.includes(lang)) {
-        return false;
-    }
-
-    if (snippet.body.split(/\r\n|\r|\n/).length < 3) {
-        return false;
-    }
-
-    return true;
-}
-
-function getStyle(snippet) {
-    if (!snippet.language)
-        return darcula;
-
-    let lang = snippet.language.toLowerCase();
-
-    if (['text', 'bash', 'shell'].includes(lang)) {
-        return agate;
-    }
-
-    if (['powershell'].includes(lang)) {
-        return tomorrowNightBlue
-    }
-
-    return darcula
-}
-
-function getLineProps(snippet) {
-    if (!snippet.language)
-        return null;
-
-    let lang = snippet.language.toLowerCase();
-
-    if (dollarSignPromptLanguages.includes(lang)) {
-        return {className: "dollarSignPrompt"};
-    }
-
-    if (arrowSignPromptLanguages.includes(lang)) {
-        return {className: "arrowSignPrompt"};
-    }
-    return null
-}
+import SnippetBodyHighlight from "./SnippetBodyHighlight";
 
 
 const defaultCopyButtonIcon = 'copy outline';
@@ -109,15 +54,7 @@ function Snippet({snippet}) {
 
                             <Grid.Row>
                                 <Grid.Column mobile={16} tablet={13} computer={14}>
-                                    <SyntaxHighlighter
-                                        language={snippet.language ? snippet.language : "text"}
-                                        style={getStyle(snippet)}
-                                        showLineNumbers={showLineNumbers(snippet)}
-                                        wrapLines={true}
-                                        lineProps={getLineProps(snippet)}
-                                    >
-                                        {snippet.body}
-                                    </SyntaxHighlighter>
+                                  <SnippetBodyHighlight snippet={snippet}/>
                                 </Grid.Column>
                                 <Grid.Column mobile={16} tablet={3} computer={2}>
                                     <Button basic color="green" size='medium'
