@@ -31,3 +31,11 @@ pre {
   padding-bottom: .3rem!important;
   color: rgba(0,0,0,.8);
 }
+
+.ui.modal>.header {
+  background-color: lightgrey;
+}
+
+.ui.modal.personal>.header, .ui.label.personal{
+  background-color: #21ba45;
+}

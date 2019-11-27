@@ -17,7 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
                   'last_name', 'full_name', 'is_staff', 'is_superuser']
 
 
-class UserShortSerializer(serializers.ModelSerializer):
+class UserShortSerializer(serializers.Serializer):
     full_name = serializers.SerializerMethodField()
 
     @staticmethod
@@ -27,13 +27,14 @@ class UserShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'full_name']
+        read_only_fields = fields
 
 
 class SnippetSerializer(serializers.ModelSerializer):
-    author = UserShortSerializer()
+    author = UserShortSerializer(required=False)
 
     class Meta:
         model = Snippet
-        fields = ['id', 'author', 'created', 'name', 'description', 'body', 'language', 'popularity']
+        fields = ['id', 'author', 'created', 'name', 'description', 'body', 'language', 'popularity', 'personal']
 
-        read_only_fields = ['created', 'author', 'popularity',]
+        read_only_fields = ['created', 'popularity', 'author']

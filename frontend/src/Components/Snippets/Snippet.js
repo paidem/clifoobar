@@ -4,6 +4,7 @@ import Moment from 'react-moment';
 import 'moment-timezone';
 import SnippetBodyHighlight from "./SnippetBodyHighlight";
 import {ActionsContext} from "../../Context/ActionsContext";
+import ModalBase from "../Modals/ModalBase";
 
 
 const defaultCopyButtonIcon = 'copy outline';
@@ -27,7 +28,7 @@ function Snippet({snippet}) {
 
         setTimeout(() => setCopyButtonIcon(defaultCopyButtonIcon), 2000);
 
-        if (voteEnabled){
+        if (voteEnabled) {
             appActions.voteForSnippet(snippet);
             setVoteEnabled(false);
             setTimeout(() => setVoteEnabled(true), 60000)
@@ -40,9 +41,11 @@ function Snippet({snippet}) {
     return (
         <React.Fragment>
             <Card fluid raised>
-                <Label size='large' attached='top'>{snippet.name}
+                <Label size='large' attached='top' className={snippet.personal && 'personal'}>
+                    {snippet.name}
                     <span style={{float: "right"}}>
-                        by {snippet.author.full_name}&nbsp;|&nbsp;
+                        
+                        by {snippet.author.full_name}{snippet.personal && ' (personal)'}&nbsp;|&nbsp;
                         <Moment fromNow
                                 withTitle
                                 titleFormat="YYYY-MM-DD HH:mm"

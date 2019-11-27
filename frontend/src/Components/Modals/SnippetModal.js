@@ -41,6 +41,7 @@ function SnippetModal({handleClose, data}) {
         description: "",
         body: "",
         language: null,
+        private: false,
     };
 
     const defaultRows = {
@@ -88,8 +89,11 @@ function SnippetModal({handleClose, data}) {
     };
 
     return (
-        <ModalBase size="large" handleClose={handleClose}>
-            <Header icon='file code outline' content={'New snippet '}/>
+        <ModalBase size="large" handleClose={handleClose} className={snippetData.personal && 'personal'}>
+            <Header icon='file code outline'
+                    content={snippetData.personal ? 'New personal snippet' :'New snippet'}
+                    // style={{backgroundColor:"#21ba45"}}
+                    />
             <Modal.Content>
                 {error && <Message negative content={error}/>}
                 <Form onSubmit={submit}>
@@ -100,6 +104,15 @@ function SnippetModal({handleClose, data}) {
                             onChange={handleInputChange}
                             name='name'
                             autoFocus={true}/>
+                    </Form.Field>
+                    <Form.Field>
+                        <label>Personal snippet</label>
+                        <Checkbox toggle
+                                  checked={snippetData.personal}
+                                  onChange={(event, data) => {
+                                      setSnippetData(s => ({...s, personal: data.checked}))
+                                  }}
+                        />
                     </Form.Field>
                     <Form.Field>
                         <label>Description</label>

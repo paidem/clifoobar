@@ -65,12 +65,13 @@ export default class ClifoobarApi {
         return this.apiInstance.post("/snippets/" + id + "/vote");
     }
 
-    createSnippet({name, description, body, language}) {
+    createSnippet({name, description, body, language, personal}) {
         let bodyFormData = new FormData();
         bodyFormData.set('name', name);
         bodyFormData.set('description', description);
         bodyFormData.set('body', body);
         bodyFormData.set('language', language);
+        bodyFormData.set('personal', personal);
         return this.apiInstance.post("/snippets/", bodyFormData);
     };
 

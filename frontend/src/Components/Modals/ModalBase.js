@@ -1,7 +1,7 @@
 import React from 'react';
 import {Modal} from "semantic-ui-react";
 
-function ModalBase({children, handleClose, size}) {
+function ModalBase({children, handleClose, size, style, className}) {
     return (
         <Modal
             open={true}
@@ -13,6 +13,8 @@ function ModalBase({children, handleClose, size}) {
                 let code = event.charCode || event.keyCode;
                 code === 27 && handleClose();
             }}
+            style={style}
+            className={className}
         >
             {children}
         </Modal>
