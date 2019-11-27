@@ -46,13 +46,10 @@ export default class GuacadminApi {
         return this.apiInstance.get("/users/current/");
     }
 
-    logout() {
-        return this.apiInstance.get("/accounts/logout/", {baseURL: "/"})
-    }
-    
+
     getSnippets({query, page, page_size}) {
         let queryPart = "?";
-        
+
         queryPart += query ? "&q=" + query : "";
         queryPart += "&page=" + page;
         queryPart += "&page_size=" + page_size;
@@ -60,7 +57,7 @@ export default class GuacadminApi {
         return this.apiInstance.get("/snippets/" + queryPart);
     }
 
-    createSnippet = ({name, description, body, language}) => {
+    createSnippet({name, description, body, language}) {
         let bodyFormData = new FormData();
         bodyFormData.set('name', name);
         bodyFormData.set('description', description);
@@ -68,4 +65,18 @@ export default class GuacadminApi {
         bodyFormData.set('language', language);
         return this.apiInstance.post("/snippets/", bodyFormData);
     };
+
+    async login({username, password}) {
+        let bodyFormData = new FormData();
+        bodyFormData.set('username', username);
+        bodyFormData.set('password', password);
+        bodyFormData.set('next', "/");
+        await this.apiInstance.get("/admin/login/", {baseURL: "/"});
+
+        return this.apiInstance.post("/admin/login/", bodyFormData, {baseURL: "/"});
+    }
+
+    logout() {
+        return this.apiInstance.get("/admin/logout/", {baseURL: "/"})
+    }
 }

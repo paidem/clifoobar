@@ -1,4 +1,3 @@
-
 from rest_framework import serializers
 
 from cfb.models import Snippet
@@ -31,8 +30,10 @@ class UserShortSerializer(serializers.ModelSerializer):
 
 
 class SnippetSerializer(serializers.ModelSerializer):
+    author = UserShortSerializer()
+
     class Meta:
         model = Snippet
-        fields = ['id', 'author', 'created', 'name', 'description', 'body','language']
+        fields = ['id', 'author', 'created', 'name', 'description', 'body', 'language']
 
         read_only_fields = ['created', 'author', ]

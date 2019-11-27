@@ -1,13 +1,15 @@
 import React, {useContext, useEffect, useState, useRef} from 'react';
 import {AppContext} from "../../Context/AppContext";
 import {ActionsContext} from "../../Context/ActionsContext";
-import {Button, Container, Divider, Grid, Icon, Input, Segment} from "semantic-ui-react";
+import {Button, Container, Divider, Form, Grid, Icon, Input, Label, Segment} from "semantic-ui-react";
 import SnippetModal from "../Modals/SnippetModal";
+import LoginForm from "./LoginForm";
 
 function Header() {
     // Context
     const [appState, setAppState] = useContext(AppContext);
     const [appActions,] = useContext(ActionsContext);
+    const [showLogin, setShowLogin] = useState(false);
 
     const [search, setSearch] = useState("");
 
@@ -32,36 +34,68 @@ function Header() {
         setAppState(state => ({...state, snippetsQuery: ""}));
     };
 
+      useEffect(() => {
+          if (appState.user) {
+              setShowLogin(false)
+          }
+    }, [appActions, appState.user]);
+
     return (
+
         <Segment>
             <Grid stackable divided>
-                <Grid.Column computer={10}>
-                    <Input fluid size='small' fluid icon placeholder='Search...'
-                           value={search}
-                           onChange={(event) => {
-                               onInputChanged(event.target.value)
-                           }}
-                           onKeyDown={(event) => {
-                               // Handle Esc button to clear
-                               let code = event.charCode || event.keyCode;
-                               if (code === 27) {
-                                   clearSearch();
-                               }
-                           }}>
-                        <input/>
-                        <Icon name='times circle outline' size='large' link
-                              onClick={() => clearSearch()}/>
-                    </Input>
-                </Grid.Column>
-                <Grid.Column computer={6}>
-                    {appState.user &&
-                    <Button
-                        onClick={() => appActions.openModal({type: SnippetModal, data: null})}
-                    >
-                        New
-                    </Button>}
-                    {appState.user && <span style={{float: "right"}}>User: {appState.user.username}</span>}
-                </Grid.Column>
+                <Grid.Row>
+                    <Grid.Column computer={10}>
+                        <Input fluid size='small' fluid icon placeholder='Search...'
+                               value={search}
+                               onChange={(event) => {
+                                   onInputChanged(event.target.value)
+                               }}
+                               onKeyDown={(event) => {
+                                   // Handle Esc button to clear
+                                   let code = event.charCode || event.keyCode;
+                                   if (code === 27) {
+                                       clearSearch();
+                                   }
+                               }}>
+                            <input/>
+                            <Icon name='times circle outline' size='large' link
+                                  onClick={() => clearSearch()}/>
+                        </Input>
+                    </Grid.Column>
+                    <Grid.Column computer={6}>
+                        {appState.user &&
+                        <Button
+                            onClick={() => appActions.openModal({type: SnippetModal, data: null})}
+                        >
+                            New
+                        </Button>}
+                        <div style={{float:"right"}}>
+                        {appState.user ?
+                            <Button animated='fade' color='green' onClick={() => appActions.logout()}>
+                                <Button.Content visible color='green'> {appState.user.username}</Button.Content>
+                                <Button.Content hidden color='red'>Logout</Button.Content>
+                            </Button>
+                            :
+
+                            <Button onClick={() => {
+                                setShowLogin(!showLogin);
+                                setAppState(s => ({...s, userLoginFailed: false}));
+                            }}>
+                                {showLogin ? "Cancel" : "Login"}
+                            </Button>
+
+                        }
+                        </div>
+                    </Grid.Column>
+                </Grid.Row>
+                {(!appState.user && showLogin) &&
+                <Grid.Row>
+                    <Grid.Column computer={12}>
+                        <LoginForm handleLoginSuccess={() => setShowLogin(false)}/>
+                    </Grid.Column>
+                </Grid.Row>
+                }
             </Grid>
         </Segment>
     )

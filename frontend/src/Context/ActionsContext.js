@@ -48,6 +48,24 @@ const ActionsProvider = (props) => {
         return appState.api.createSnippet(props);
     };
 
+    const login = (props) => {
+        return appState.api.login(props)
+            .then(response => {
+                checkLoginStatus(5);
+                updateAppState({userLoginFailed: false});
+            })
+            .catch(error => {
+                updateAppState({userLoginFailed: true});
+            })
+    };
+
+    const logout = () => {
+        appState.api.logout()
+            .then(response => {
+                updateAppState({user:null});
+            })
+    };
+
     const checkLoginStatus = (retriesLeft) => {
         retriesLeft--;
 
@@ -101,6 +119,8 @@ const ActionsProvider = (props) => {
         checkLoginStatus: checkLoginStatus,
         updateSnippets: updateSnippets,
         openModal: openModal,
+        login: login,
+        logout: logout,
     };
 
     const [state, setState] = useState(defaultState);

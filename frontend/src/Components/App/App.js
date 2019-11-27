@@ -34,7 +34,11 @@ function App() {
             {appState.activeModal}
             <Container>
                 <Header/>
+            </Container>
+            <Container style={{paddingTop: "30px"}}>
+                
                 <SnippetsList items={appState.snippets}/>
+                
             </Container>
         </div>
     );
