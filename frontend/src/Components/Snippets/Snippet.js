@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, Card, Grid, Label} from "semantic-ui-react";
+import {Button, Card, Grid, Icon, Label} from "semantic-ui-react";
 import Moment from 'react-moment';
 import 'moment-timezone';
 import SnippetBodyHighlight from "./SnippetBodyHighlight";
@@ -21,7 +21,7 @@ function Snippet({snippet}) {
         document.body.removeChild(el);
 
         setCopyButtonIcon(successCopyButtonIcon);
-        setTimeout(() => setCopyButtonIcon(defaultCopyButtonIcon),2000);
+        setTimeout(() => setCopyButtonIcon(defaultCopyButtonIcon), 2000);
 
     };
 
@@ -29,7 +29,8 @@ function Snippet({snippet}) {
         <React.Fragment>
             <Card fluid raised>
                 <Label size='large' attached='top'>{snippet.name}
-                  <span style={{float: "right"}}>Created&nbsp;
+                    <span style={{float: "right"}}>
+                        by {snippet.author.full_name}&nbsp;|&nbsp;
                         <Moment fromNow
                                 withTitle
                                 titleFormat="YYYY-MM-DD HH:mm"
@@ -45,7 +46,7 @@ function Snippet({snippet}) {
                             <Grid.Row>
                                 <Grid.Column mobile={16} tablet={10} computer={14}>
                                     <div className='snippetDescription'>
-                                    <code >{snippet.description}</code>
+                                        <code>{snippet.description}</code>
                                     </div>
                                 </Grid.Column>
                                 <Grid.Column mobile={16} tablet={6} computer={2}>
@@ -54,13 +55,24 @@ function Snippet({snippet}) {
 
                             <Grid.Row>
                                 <Grid.Column mobile={16} tablet={13} computer={14}>
-                                  <SnippetBodyHighlight snippet={snippet}/>
+                                    <SnippetBodyHighlight snippet={snippet}/>
                                 </Grid.Column>
                                 <Grid.Column mobile={16} tablet={3} computer={2}>
-                                    <Button basic color="green" size='medium'
-                                            onClick={() => copyToClipboard(snippet.body)}
-                                            icon={copyButtonIcon}
+                                    {/*<Button basic color="green" size='medium'*/}
+                                    {/*        onClick={() => copyToClipboard(snippet.body)}*/}
+                                    {/*        icon={copyButtonIcon}*/}
+                                    {/*/>*/}
+
+                                    <Button
+                                        color='blue'
+                                        content=''
+                                        compact
+                                        icon={copyButtonIcon}
+                                        label={{basic: true, color: 'blue', pointing: 'left', content: '42'}}
+                                         onClick={() => copyToClipboard(snippet.body)}
+                                        size='medium'
                                     />
+
                                 </Grid.Column>
                             </Grid.Row>
                         </Grid>
