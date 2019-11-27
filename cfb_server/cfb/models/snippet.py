@@ -17,8 +17,9 @@ class Snippet(models.Model):
     body = models.TextField(blank=True)
     language = models.CharField(max_length=20, null=True, blank=True)
 
+    popularity = models.IntegerField(default=0)
+
     # TODO: Tags
-    # TODO: Language selection
     # TODO: Versioning
 
     def __str__(self):

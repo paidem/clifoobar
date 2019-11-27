@@ -62,7 +62,7 @@ const ActionsProvider = (props) => {
     const logout = () => {
         appState.api.logout()
             .then(response => {
-                updateAppState({user:null});
+                updateAppState({user: null});
             })
     };
 
@@ -114,6 +114,17 @@ const ActionsProvider = (props) => {
     };
 
 
+    const voteForSnippet = async (snippet) => {
+        setAppState(state => {
+            let updatedSnippet = snippet;
+            updatedSnippet.popularity += 1;
+            state.snippets.splice(state.snippets.indexOf(snippet), 1, updatedSnippet);
+            return (state)
+        });
+
+        await appState.api.voteForSnippet(snippet.id);
+    };
+
     const defaultState = {
         createSnippet: createSnippet,
         checkLoginStatus: checkLoginStatus,
@@ -121,6 +132,7 @@ const ActionsProvider = (props) => {
         openModal: openModal,
         login: login,
         logout: logout,
+        voteForSnippet: voteForSnippet,
     };
 
     const [state, setState] = useState(defaultState);

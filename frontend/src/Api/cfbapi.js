@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default class GuacadminApi {
+export default class ClifoobarApi {
     apiInstance = axios.create({
         baseURL: '/api/',
         timeout: 1000,
@@ -55,6 +55,14 @@ export default class GuacadminApi {
         queryPart += "&page_size=" + page_size;
 
         return this.apiInstance.get("/snippets/" + queryPart);
+    }
+
+    getSnippet(id) {
+        return this.apiInstance.get("/snippets/" + id + "/");
+    }
+
+    voteForSnippet(id) {
+        return this.apiInstance.post("/snippets/" + id + "/vote");
     }
 
     createSnippet({name, description, body, language}) {

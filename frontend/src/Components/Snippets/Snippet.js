@@ -1,16 +1,19 @@
-import React, {useState} from 'react';
-import {Button, Card, Grid, Icon, Label} from "semantic-ui-react";
+import React, {useState, useContext} from 'react';
+import {Button, Card, Grid, Icon, Label, Statistic} from "semantic-ui-react";
 import Moment from 'react-moment';
 import 'moment-timezone';
 import SnippetBodyHighlight from "./SnippetBodyHighlight";
+import {ActionsContext} from "../../Context/ActionsContext";
 
 
 const defaultCopyButtonIcon = 'copy outline';
 const successCopyButtonIcon = 'thumbs up';
 
 function Snippet({snippet}) {
+    const [appActions,] = useContext(ActionsContext);
 
     const [copyButtonIcon, setCopyButtonIcon] = useState(defaultCopyButtonIcon);
+    const [voteEnabled, setVoteEnabled] = useState(true);
 
     const copyToClipboard = str => {
         const el = document.createElement('textarea');
@@ -21,7 +24,16 @@ function Snippet({snippet}) {
         document.body.removeChild(el);
 
         setCopyButtonIcon(successCopyButtonIcon);
+
         setTimeout(() => setCopyButtonIcon(defaultCopyButtonIcon), 2000);
+
+        if (voteEnabled){
+            appActions.voteForSnippet(snippet);
+            setVoteEnabled(false);
+            setTimeout(() => setVoteEnabled(true), 60000)
+
+        }
+
 
     };
 
@@ -68,10 +80,16 @@ function Snippet({snippet}) {
                                         content=''
                                         compact
                                         icon={copyButtonIcon}
-                                        label={{basic: true, color: 'blue', pointing: 'left', content: '42'}}
-                                         onClick={() => copyToClipboard(snippet.body)}
+                                        label={{
+                                            basic: true,
+                                            color: 'blue',
+                                            pointing: 'left',
+                                            content: snippet.popularity
+                                        }}
+                                        onClick={() => copyToClipboard(snippet.body)}
                                         size='medium'
                                     />
+
 
                                 </Grid.Column>
                             </Grid.Row>

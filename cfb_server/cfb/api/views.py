@@ -1,8 +1,10 @@
-from django.db.models import Q
+from django.db.models import Q, F
 from rest_framework import viewsets, status
+from rest_framework.decorators import api_view
 from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError, ParseError
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated, BasePermission, IsAdminUser
+from rest_framework.response import Response
 
 from cfb.models import Snippet
 from .serializers import UserSerializer, SnippetSerializer
@@ -75,3 +77,16 @@ class SnippetViewSet(viewsets.ModelViewSet):
     @classmethod
     def add_contains_filter(cls, queryset, term):
         return queryset.filter(Q(name__contains=term) | Q(description__contains=term) | Q(body__contains=term))
+
+
+@api_view(['POST'])
+def snippets_i_used_it_view(request, uuid):
+
+    try:
+        snippet = Snippet.objects.get(pk=uuid)
+        snippet.popularity = F('popularity') + 1
+        snippet.save()
+        return Response("Thank you! Your vote matters to us!", status=status.HTTP_202_ACCEPTED)
+
+    except Snippet.DoesNotExist:
+        raise NotFound(detail="Ticket not found")
