@@ -34,10 +34,10 @@ function Header() {
         setAppState(state => ({...state, snippetsQuery: ""}));
     };
 
-      useEffect(() => {
-          if (appState.user) {
-              setShowLogin(false)
-          }
+    useEffect(() => {
+        if (appState.user) {
+            setShowLogin(false)
+        }
     }, [appActions, appState.user]);
 
     return (
@@ -70,22 +70,22 @@ function Header() {
                         >
                             New
                         </Button>}
-                        <div style={{float:"right"}}>
-                        {appState.user ?
-                            <Button animated='fade' color='green' onClick={() => appActions.logout()}>
-                                <Button.Content visible color='green'> {appState.user.username}</Button.Content>
-                                <Button.Content hidden color='red'>Logout</Button.Content>
-                            </Button>
-                            :
+                        <div style={{float: "right"}}>
+                            {appState.user ?
+                                <Button animated='fade' color='green' onClick={() => appActions.logout()}>
+                                    <Button.Content visible color='green'> {appState.user.username}</Button.Content>
+                                    <Button.Content hidden color='red'>Logout</Button.Content>
+                                </Button>
+                                :
 
-                            <Button onClick={() => {
-                                setShowLogin(!showLogin);
-                                setAppState(s => ({...s, userLoginFailed: false}));
-                            }}>
-                                {showLogin ? "Cancel" : "Login"}
-                            </Button>
+                                <Button onClick={() => {
+                                    setShowLogin(!showLogin);
+                                    setAppState(s => ({...s, userLoginFailed: false}));
+                                }}>
+                                    {showLogin ? "Cancel" : "Login"}
+                                </Button>
 
-                        }
+                            }
                         </div>
                     </Grid.Column>
                 </Grid.Row>

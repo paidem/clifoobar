@@ -17,7 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
                   'last_name', 'full_name', 'is_staff', 'is_superuser']
 
 
-class UserShortSerializer(serializers.Serializer):
+class UserShortSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
 
     @staticmethod

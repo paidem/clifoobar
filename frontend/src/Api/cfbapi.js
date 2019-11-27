@@ -65,14 +65,19 @@ export default class ClifoobarApi {
         return this.apiInstance.post("/snippets/" + id + "/vote");
     }
 
-    createSnippet({name, description, body, language, personal}) {
+    saveSnippet({name, description, body, language, personal, id = null}, editMode = false) {
         let bodyFormData = new FormData();
         bodyFormData.set('name', name);
         bodyFormData.set('description', description);
         bodyFormData.set('body', body);
         bodyFormData.set('language', language);
         bodyFormData.set('personal', personal);
-        return this.apiInstance.post("/snippets/", bodyFormData);
+
+        if (editMode) {
+            return this.apiInstance.put("/snippets/" + id + "/", bodyFormData);
+        } else {
+            return this.apiInstance.post("/snippets/", bodyFormData);
+        }
     };
 
     async login({username, password}) {

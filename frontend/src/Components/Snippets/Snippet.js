@@ -5,12 +5,15 @@ import 'moment-timezone';
 import SnippetBodyHighlight from "./SnippetBodyHighlight";
 import {ActionsContext} from "../../Context/ActionsContext";
 import ModalBase from "../Modals/ModalBase";
+import SnippetModal from "../Modals/SnippetModal";
+import {AppContext} from "../../Context/AppContext";
 
 
 const defaultCopyButtonIcon = 'copy outline';
 const successCopyButtonIcon = 'thumbs up';
 
 function Snippet({snippet}) {
+    const [appState,] = useContext(AppContext);
     const [appActions,] = useContext(ActionsContext);
 
     const [copyButtonIcon, setCopyButtonIcon] = useState(defaultCopyButtonIcon);
@@ -32,10 +35,8 @@ function Snippet({snippet}) {
             appActions.voteForSnippet(snippet);
             setVoteEnabled(false);
             setTimeout(() => setVoteEnabled(true), 60000)
-
         }
-
-
+        
     };
 
     return (
@@ -65,35 +66,54 @@ function Snippet({snippet}) {
                                     </div>
                                 </Grid.Column>
                                 <Grid.Column mobile={16} tablet={6} computer={2}>
+
                                 </Grid.Column>
                             </Grid.Row>
 
                             <Grid.Row>
                                 <Grid.Column mobile={16} tablet={13} computer={14}>
-                                    <SnippetBodyHighlight snippet={snippet}/>
+                                    <div style={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        alignItems: "flex-start"
+                                    }}>
+                                        <div style={{display: "block", flexGrow: 5}}>
+                                            <SnippetBodyHighlight snippet={snippet}/>
+                                        </div>
+
+                                        <Button
+                                            style={{marginLeft: "5px"}}
+                                            color='orange'
+                                            content=''
+                                            compact
+                                            icon={copyButtonIcon}
+                                            label={{
+                                                basic: true,
+                                                color: 'grey',
+                                                pointing: 'left',
+                                                content: snippet.popularity
+                                            }}
+                                            onClick={() => copyToClipboard(snippet.body)}
+                                            size='medium'
+                                        />
+                                        <br/>
+
+                                    </div>
                                 </Grid.Column>
                                 <Grid.Column mobile={16} tablet={3} computer={2}>
-                                    {/*<Button basic color="green" size='medium'*/}
-                                    {/*        onClick={() => copyToClipboard(snippet.body)}*/}
-                                    {/*        icon={copyButtonIcon}*/}
-                                    {/*/>*/}
-
+                                    {(appState.user && snippet.author && snippet.author.id === appState.user.id) &&
                                     <Button
-                                        color='blue'
+                                        color='grey'
                                         content=''
                                         compact
-                                        icon={copyButtonIcon}
+                                        icon='edit'
                                         label={{
-                                            basic: true,
-                                            color: 'blue',
-                                            pointing: 'left',
-                                            content: snippet.popularity
-                                        }}
-                                        onClick={() => copyToClipboard(snippet.body)}
+                                            color:'grey',
+                                            pointing:'left',
+                                            content:'Edit'}}
                                         size='medium'
-                                    />
-
-
+                                        onClick={() => appActions.openModal({type: SnippetModal, data: {edit: true, snippet: snippet}})}
+                                    />}
                                 </Grid.Column>
                             </Grid.Row>
                         </Grid>

@@ -44,8 +44,8 @@ const ActionsProvider = (props) => {
             })
     };
 
-    const createSnippet = (props) => {
-        return appState.api.createSnippet(props);
+    const saveSnippet = (props, editMode) => {
+        return appState.api.saveSnippet(props, editMode);
     };
 
     const login = (props) => {
@@ -126,7 +126,7 @@ const ActionsProvider = (props) => {
     };
 
     const defaultState = {
-        createSnippet: createSnippet,
+        saveSnippet: saveSnippet,
         checkLoginStatus: checkLoginStatus,
         updateSnippets: updateSnippets,
         openModal: openModal,

@@ -73,7 +73,10 @@ class SnippetViewSet(viewsets.ModelViewSet):
                 queryset = self.add_contains_filter(queryset, term)
 
         # Show only non personal and those where user is author
-        queryset = queryset.filter(Q(personal=False) | Q(author=self.request.user))
+        if (self.request.user.is_authenticated):
+            queryset = queryset.filter(Q(personal=False) | Q(author=self.request.user))
+        else:
+            queryset = queryset.filter(Q(personal=False))
 
         return queryset
 
