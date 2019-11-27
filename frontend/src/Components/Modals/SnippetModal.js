@@ -41,7 +41,7 @@ function SnippetModal({handleClose, data}) {
         description: "",
         body: "",
         language: null,
-        private: false,
+        personal: false,
     };
 
     const defaultRows = {
