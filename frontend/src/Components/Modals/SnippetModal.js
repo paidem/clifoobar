@@ -71,29 +71,31 @@ function SnippetModal({handleClose, data}) {
 
     };
 
+    const updateRows = ({name, value}) => {
+        if (defaultRows[name] > 0) {
+            let numRows = value.split(/\r\n|\r|\n/).length;
+            if (numRows > defaultRows[name]) {
+                let rowUpdate = {};
+                rowUpdate[name] = numRows;
+                setRows(r => ({...r, ...rowUpdate}));
+            }
+        }
+    };
 
     const handleInputChange = (event, data) => {
         let update = {};
         update[data.name] = data.value;
         setSnippetData(s => ({...s, ...update}));
 
-        // Check if we are controlling rows for this input
-        if (defaultRows[data.name] > 0) {
-            let numberOfRows = data.value.split(/\r\n|\r|\n/).length;
-            if (numberOfRows > defaultRows[data.name]) {
-                let rowUpdate = {};
-                rowUpdate[data.name] = numberOfRows;
-                setRows(r => ({...r, ...rowUpdate}));
-            }
-        }
+        updateRows(data);
     };
 
     return (
         <ModalBase size="large" handleClose={handleClose} className={snippetData.personal && 'personal'}>
             <Header icon='file code outline'
-                    content={snippetData.personal ? 'New personal snippet' :'New snippet'}
-                    // style={{backgroundColor:"#21ba45"}}
-                    />
+                    content={snippetData.personal ? 'New personal snippet' : 'New snippet'}
+                // style={{backgroundColor:"#21ba45"}}
+            />
             <Modal.Content>
                 {error && <Message negative content={error}/>}
                 <Form onSubmit={submit}>
