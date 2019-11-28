@@ -35,6 +35,8 @@ function App() {
             <Container style={{paddingTop: "30px"}}>
                 <SnippetsList items={appState.snippets}/>
             </Container>
+            <Container style={{paddingBottom:"40px"}}>
+            </Container>
         </div>
     );
 }
