@@ -78,6 +78,8 @@ class SnippetViewSet(viewsets.ModelViewSet):
         else:
             queryset = queryset.filter(Q(personal=False))
 
+        queryset = queryset.order_by('-popularity')
+
         return queryset
 
     @classmethod
