@@ -1,15 +1,13 @@
 from django.db.models import Q, F
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
-from rest_framework.exceptions import NotFound, PermissionDenied, ValidationError, ParseError
+from rest_framework.exceptions import NotFound
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticated, BasePermission, IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from taggit.models import Tag
-from taggit_serializer.serializers import TagListSerializerField
 
 from cfb.models import Snippet
-from cfb.models.snippet import TaggedSnippet
 from .serializers import UserSerializer, SnippetSerializer, TagSerializer
 from users.models import User
 
@@ -25,8 +23,10 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         return super(UserViewSet, self).dispatch(request, *args, **kwargs)
 
 
+# noinspection PyUnusedLocal
 class SnippetAccessPermission(BaseException):
-    def has_permission(self, request, view):
+    @staticmethod
+    def has_permission(request, view):
         # Allow read to any users
         if request.method in ["GET", 'HEAD', 'OPTIONS']:
             return True
@@ -35,7 +35,8 @@ class SnippetAccessPermission(BaseException):
         if request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
             return request.user.is_authenticated
 
-    def has_object_permission(self, request, view, obj):
+    @staticmethod
+    def has_object_permission(request, view, obj):
         # Allow read to any users
         if request.method in ["GET", 'HEAD', 'OPTIONS']:
             return True
@@ -84,7 +85,6 @@ class SnippetViewSet(viewsets.ModelViewSet):
         if len(tags) > 0:
             queryset = queryset.filter(tags__name__in=tags).distinct()
 
-
         # Add ordering
         order_by = self.request.query_params.get('order_by', None)
         if order_by is not None:
@@ -92,15 +92,14 @@ class SnippetViewSet(viewsets.ModelViewSet):
         else:
             queryset = queryset.order_by('created')
 
-        if (order_by == '-personal'):
+        if order_by == '-personal':
             queryset = queryset.filter(Q(personal=True))
 
         # Show only non personal and those where user is author
-        if (self.request.user.is_authenticated):
+        if self.request.user.is_authenticated:
             queryset = queryset.filter(Q(personal=False) | Q(author=self.request.user))
         else:
             queryset = queryset.filter(Q(personal=False))
-
 
         return queryset
 
@@ -111,7 +110,6 @@ class SnippetViewSet(viewsets.ModelViewSet):
 
 @api_view(['POST'])
 def snippets_i_used_it_view(request, uuid):
-
     try:
         snippet = Snippet.objects.get(pk=uuid)
         snippet.popularity = F('popularity') + 1
