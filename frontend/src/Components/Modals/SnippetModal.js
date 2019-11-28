@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState, useCallback} from 'react';
 import {
     Button,
-    Checkbox, Container, Divider,
+    Checkbox, Container,
     Dropdown,
     Form,
     Grid,

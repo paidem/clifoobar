@@ -4,7 +4,6 @@ import {ActionsContext} from "../../Context/ActionsContext";
 import {
     Button,
     Dropdown,
-    Grid,
     Icon,
     Input,
     Segment,

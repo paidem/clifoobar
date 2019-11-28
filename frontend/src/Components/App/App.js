@@ -7,7 +7,7 @@ import {ActionsContext} from "../../Context/ActionsContext";
 
 function App() {
     // Context
-    const [appState, setAppState] = useContext(AppContext);
+    const [appState, ] = useContext(AppContext);
     const [appActions,] = useContext(ActionsContext);
 
     useEffect(() => {
