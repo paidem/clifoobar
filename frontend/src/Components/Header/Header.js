@@ -1,9 +1,46 @@
 import React, {useContext, useEffect, useState, useRef} from 'react';
 import {AppContext} from "../../Context/AppContext";
 import {ActionsContext} from "../../Context/ActionsContext";
-import {Button, Container, Divider, Form, Grid, Icon, Input, Label, Segment, SegmentGroup} from "semantic-ui-react";
+import {
+    Button,
+    Container,
+    Divider,
+    Dropdown,
+    Form,
+    Grid,
+    Icon,
+    Input,
+    Label,
+    Segment,
+    SegmentGroup
+} from "semantic-ui-react";
 import SnippetModal from "../Modals/SnippetModal";
 import LoginForm from "./LoginForm";
+
+
+const orderOptions = [
+    {
+        key: 'popularity-desc',
+        text: 'By popularity',
+        value: '-popularity',
+    },
+    {
+        key: 'created-desc',
+        text: 'Newest',
+        value: '-created',
+    },
+    {
+        key: 'created-asc',
+        text: 'Oldest',
+        value: 'created',
+    },
+    {
+        key: 'personal',
+        text: 'My personal',
+        value: '-personal',
+    },
+];
+
 
 function Header() {
     // Context
@@ -100,6 +137,16 @@ function Header() {
                     </Grid.Column>
                 </Grid>
             </Segment>}
+            <Segment textAlign='right'>
+                <Dropdown
+                    inline
+                    options={orderOptions}
+                    defaultValue={orderOptions[0].value}
+                    onChange={(event, eventData) => {
+                        setAppState(s => ({...s, order_by: eventData.value}));
+                    }}
+                />
+            </Segment>
         </SegmentGroup>
 
     )

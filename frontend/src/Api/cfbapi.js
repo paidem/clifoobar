@@ -47,12 +47,14 @@ export default class ClifoobarApi {
     }
 
 
-    getSnippets({query, page, page_size}) {
+    getSnippets({query, page, page_size, order_by}) {
         let queryPart = "?";
 
         queryPart += query ? "&q=" + query : "";
+        queryPart += order_by ? "&order_by=" + order_by : "";
         queryPart += "&page=" + page;
         queryPart += "&page_size=" + page_size;
+
 
         return this.apiInstance.get("/snippets/" + queryPart);
     }

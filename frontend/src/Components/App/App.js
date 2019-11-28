@@ -20,9 +20,10 @@ function App() {
                 query: appState.snippetsQuery,
                 page: appState.snippetsActivePage,
                 page_size: appState.snippetsPageSize,
+                order_by: appState.order_by,
             });
         }
-    }, [appActions, appState.activeModal, appState.snippetsActivePage, appState.snippetsPageSize, appState.snippetsQuery]);
+    }, [appActions, appState.activeModal, appState.order_by, appState.snippetsActivePage, appState.snippetsPageSize, appState.snippetsQuery]);
 
     return (
         <div className="App">

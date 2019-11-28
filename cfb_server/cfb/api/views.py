@@ -72,13 +72,22 @@ class SnippetViewSet(viewsets.ModelViewSet):
             for term in terms:
                 queryset = self.add_contains_filter(queryset, term)
 
+        # Add ordering
+        order_by = self.request.query_params.get('order_by', None)
+        if order_by is not None:
+            queryset = queryset.order_by(order_by)
+        else:
+            queryset = queryset.order_by('created')
+
+        if (order_by == '-personal'):
+            queryset = queryset.filter(Q(personal=True))
+
         # Show only non personal and those where user is author
         if (self.request.user.is_authenticated):
             queryset = queryset.filter(Q(personal=False) | Q(author=self.request.user))
         else:
             queryset = queryset.filter(Q(personal=False))
 
-        queryset = queryset.order_by('-popularity')
 
         return queryset
 

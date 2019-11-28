@@ -22,6 +22,7 @@ const ActionsProvider = (props) => {
                 query: props.query,
                 page: props.page,
                 page_size: props.page_size,
+                order_by: props.order_by,
             })
             .then(response => {
                     if (response.data.results) {

@@ -16,7 +16,8 @@ const AppProvider = (props) => {
         snippetsQuery: null,
         snippetsPageSize: 10,
         snippetsActivePage: 1,
-        snippetsTotal: 0,        
+        snippetsTotal: 0,
+        order_by: '-popularity',
         user: null,
         userLoginFailed: false,
 
