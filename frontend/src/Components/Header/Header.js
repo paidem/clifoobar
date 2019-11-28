@@ -37,6 +37,35 @@ const orderOptions = [
     },
 ];
 
+const pageSizeOptions = [
+    {
+        key: '5',
+        text: '5',
+        value: '5',
+    },
+    {
+        key: '10',
+        text: '10',
+        value: '10',
+    },
+    {
+        key: '20',
+        text: '20',
+        value: '20',
+    },
+    {
+        key: '50',
+        text: '50',
+        value: '50',
+    },
+    {
+        key: '100',
+        text: '100',
+        value: '100',
+    },
+
+];
+
 
 function Header() {
     // Context
@@ -79,7 +108,7 @@ function Header() {
     useEffect(() => {
         if (appState.snippetsQuery && appState.snippetsQuery !== search && appState.snippetsQuery.length > search.length) {
             setSearch(appState.snippetsQuery);
-            
+
             // if we modified input - focus input
             inputRef.current.focus();
         }
@@ -147,12 +176,24 @@ function Header() {
                 </Grid>
             </Segment>}
             <Segment textAlign='right'>
+
                 <Dropdown
                     inline
                     options={orderOptions}
                     defaultValue={orderOptions[0].value}
                     onChange={(event, eventData) => {
                         setAppState(s => ({...s, order_by: eventData.value}));
+                    }}
+                />
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                <Dropdown
+                    inline
+                    options={pageSizeOptions}
+                    defaultValue={appState.snippetsPageSize.toString()}
+                    onChange={(event, eventData) => {
+                        setAppState(s => ({...s, snippetsPageSize: eventData.value}));
                     }}
                 />
             </Segment>
