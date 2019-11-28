@@ -307,16 +307,16 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                         </div>
                         {deleteConfirmationActive ?
                             <Button.Group>
-                                <Button onClick={handleDeleteCancel}>Cancel</Button>
-                                <Button.Or/>
                                 <Button negative onClick={handleDelete}>Delete</Button>
+                                <Button.Or/>
+                                <Button onClick={handleDeleteCancel}>Cancel</Button>
                             </Button.Group>
                             :
                             <Button
                                 color='red'
                                 disabled={!data || !data.edit}
                                 onClick={() => setDeleteConfirmationActive(true)}>
-                                <Icon name='delete'/> Delete
+                               Delete
                             </Button>
                         }
                     </Container>
