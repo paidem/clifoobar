@@ -130,10 +130,36 @@ const ActionsProvider = (props) => {
         await appState.api.voteForSnippet(snippet.id);
     };
 
+    const addTagToSearch = (tag) => {
+        setAppState(state => {
+            let update = {};
+            let query = state.snippetsQuery;
+            if (query && query.length > 0) {
+                update.snippetsQuery = query.trim() + ' ' + tag + ' ';
+            } else {
+                update.snippetsQuery = tag + ' ';
+            }
+
+            // our updated snippet list could be shorter with added tag, so set page to 1
+            update.snippetsActivePage = 1;
+            return {...state, ...update};
+        });
+    };
+
+    const updateTags = () => {
+        appState.api.getTags()
+            .then(response => {
+                let tags = response.data.map(item => item.name);
+                updateAppState({tags: tags});
+            })
+    };
+
     const defaultState = {
+        addTagToSearch: addTagToSearch,
         saveSnippet: saveSnippet,
         checkLoginStatus: checkLoginStatus,
         updateSnippets: updateSnippets,
+        updateTags: updateTags,
         openModal: openModal,
         login: login,
         logout: logout,

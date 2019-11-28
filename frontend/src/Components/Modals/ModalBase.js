@@ -9,10 +9,7 @@ function ModalBase({children, handleClose, size, style, className}) {
             size={size || 'small'}
             centered={false}
             closeOnDimmerClick={false}
-            onKeyDown={(event) => {
-                let code = event.charCode || event.keyCode;
-                code === 27 && handleClose();
-            }}
+            closeOnEscape={false}
             style={style}
             className={className}
         >

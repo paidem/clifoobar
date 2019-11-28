@@ -39,3 +39,7 @@ pre {
 .ui.modal.personal>.header, .ui.label.personal{
   background-color: #21ba45;
 }
+
+.snippetTags {
+  padding-top: 10px;
+}

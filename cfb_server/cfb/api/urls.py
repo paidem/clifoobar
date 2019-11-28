@@ -7,6 +7,7 @@ router = routers.DefaultRouter()
 
 router.register(r'users', views.UserViewSet)
 router.register(r'snippets', views.SnippetViewSet, basename="Snippet")
+router.register(r'tags', views.TagsViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

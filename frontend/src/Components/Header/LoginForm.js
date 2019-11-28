@@ -1,5 +1,5 @@
-import React, {useContext, useEffect, useState, useRef} from 'react';
-import {Form, Input} from "semantic-ui-react";
+import React, {useContext, useState} from 'react';
+import {Form} from "semantic-ui-react";
 import {AppContext} from "../../Context/AppContext";
 import {ActionsContext} from "../../Context/ActionsContext";
 

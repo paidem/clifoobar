@@ -5,9 +5,12 @@ from rest_framework.exceptions import NotFound, PermissionDenied, ValidationErro
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated, BasePermission, IsAdminUser
 from rest_framework.response import Response
+from taggit.models import Tag
+from taggit_serializer.serializers import TagListSerializerField
 
 from cfb.models import Snippet
-from .serializers import UserSerializer, SnippetSerializer
+from cfb.models.snippet import TaggedSnippet
+from .serializers import UserSerializer, SnippetSerializer, TagSerializer
 from users.models import User
 
 
@@ -67,10 +70,20 @@ class SnippetViewSet(viewsets.ModelViewSet):
         queryset = Snippet.objects.all()
 
         q = self.request.query_params.get('q', None)
+
+        tags = set()
+
         if q is not None:
             terms = q.split(' ')
             for term in terms:
-                queryset = self.add_contains_filter(queryset, term)
+                if term and term[0] == '#':
+                    tags.add(term[1:])
+                else:
+                    queryset = self.add_contains_filter(queryset, term)
+
+        if len(tags) > 0:
+            queryset = queryset.filter(tags__name__in=tags).distinct()
+
 
         # Add ordering
         order_by = self.request.query_params.get('order_by', None)
@@ -107,3 +120,8 @@ def snippets_i_used_it_view(request, uuid):
 
     except Snippet.DoesNotExist:
         raise NotFound(detail="Ticket not found")
+
+
+class TagsViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = TagSerializer
+    queryset = Tag.objects.all()

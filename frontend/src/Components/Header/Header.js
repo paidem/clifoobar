@@ -3,14 +3,10 @@ import {AppContext} from "../../Context/AppContext";
 import {ActionsContext} from "../../Context/ActionsContext";
 import {
     Button,
-    Container,
-    Divider,
     Dropdown,
-    Form,
     Grid,
     Icon,
     Input,
-    Label,
     Segment,
     SegmentGroup
 } from "semantic-ui-react";
@@ -53,6 +49,8 @@ function Header() {
     // Timer which controls timeot for display size update
     const updateAppQueryTimer = useRef(0);
 
+    const inputRef = useRef();
+
     const onInputChanged = (inputValue) => {
         if (updateAppQueryTimer.current) {
             clearTimeout(updateAppQueryTimer.current);
@@ -68,7 +66,7 @@ function Header() {
 
     const clearSearch = () => {
         setSearch("");
-        setAppState(state => ({...state, snippetsQuery: ""}));
+        setAppState(state => ({...state, snippetsQuery: "", snippetsActivePage: 1}));
     };
 
     useEffect(() => {
@@ -77,12 +75,23 @@ function Header() {
         }
     }, [appActions, appState.user]);
 
+    // Syncronize search input back from AppState
+    useEffect(() => {
+        if (appState.snippetsQuery && appState.snippetsQuery !== search && appState.snippetsQuery.length > search.length) {
+            setSearch(appState.snippetsQuery);
+            
+            // if we modified input - focus input
+            inputRef.current.focus();
+        }
+    }, [appState.snippetsQuery, search]);
+
     return (
         <SegmentGroup>
             <Segment>
                 <Grid stackable divided>
                     <Grid.Column computer={10}>
-                        <Input fluid size='small' fluid icon placeholder='Search...'
+                        <Input fluid size='small' icon placeholder='Search...'
+                               ref={inputRef}
                                value={search}
                                onChange={(event) => {
                                    onInputChanged(event.target.value)

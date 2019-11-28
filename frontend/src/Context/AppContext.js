@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import cfbapi from "../Api/cfbapi";
 
 const api = new cfbapi();
@@ -18,6 +18,7 @@ const AppProvider = (props) => {
         snippetsActivePage: 1,
         snippetsTotal: 0,
         order_by: '-popularity',
+        tags: [],
         user: null,
         userLoginFailed: false,
 

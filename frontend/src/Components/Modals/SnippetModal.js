@@ -17,6 +17,7 @@ import {ActionsContext} from "../../Context/ActionsContext";
 import ModalBase from "./ModalBase";
 import {sortArrayOfObjects} from "../../Utils/sortArrayOfObjects";
 import SnippetBodyHighlight from "../Snippets/SnippetBodyHighlight";
+import Tags from '@yaireo/tagify/dist/react.tagify'
 
 const languageOptions = [
     {key: 'bash', value: 'bash', text: 'Bash'},
@@ -63,7 +64,7 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
             // objects are not valid react child and we render error verbatim, so to make it string, concat
             setError("" + error);
         }
-    }
+    };
 
     const updateRows = useCallback(({name, value}) => {
         if (defaultRows[name] > 0) {
@@ -100,12 +101,56 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
     };
 
     const handleDeleteCancel = () => {
-        handleClose();
+        setDeleteConfirmationActive(false);
+    };
+
+    // const onTagifyRemove = (i) => {
+    //     let tags = snippetData.tags;
+    //     tags.splice(i, 1);
+    //     setSnippetData(s => ({...s, tags: tags}));
+    // };
+    //
+    // const onTagifyAdd = (tag) => {
+    //     let tags = snippetData.tags;
+    //     tags.concat(tag);
+    //     setSnippetData(s => ({...s, tags: tags}));
+    // };
+
+    // callbacks for all of Tagify's events:
+    const onTagifyAdd = e => {
+        setSnippetData(sd => {
+            sd.tags.push(e.detail.data.value);
+            return sd;
+        });
+    };
+
+    const onTagifyRemove = e => {
+        setSnippetData(sd => {
+            sd.tags.splice(sd.tags.indexOf(e.detail.data.value), 1);
+            return sd;
+        })
+    };
+
+    // const onTagifyInput = e => {
+    //     console.log('input:', e.detail);
+    // }
+
+    // const onTagifyInvalid = e => {
+    //     console.log('invalid:', e.detail);
+    // };
+
+    const tagifySettings = {
+        whitelist: appState.tags,
+        callbacks: {
+            add: onTagifyAdd,
+            remove: onTagifyRemove,
+            // input: onTagifyInput,
+            // invalid: onTagifyInvalid
+        }
     };
 
     // Load data if we are in edit mode
     useEffect(() => {
-        console.log("Effect")
         if (data && data.edit) {
             setSnippetData(data.snippet);
 
@@ -120,7 +165,7 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
 
 
     return (
-        <ModalBase size="large" handleClose={handleClose} className={snippetData.personal && 'personal'}>
+        <ModalBase size="large" handleClose={handleClose} className={snippetData.personal ? 'personal' : ''}>
             <Header icon='file code outline'
                     content={(data && data.edit ? 'Edit ' : 'New ') + (snippetData.personal ? 'personal ' : '') + 'snippet'}
                 // style={{backgroundColor:"#21ba45"}}
@@ -155,10 +200,16 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                             rows={rows.description}
                             style={{fontFamily: "monospace"}}
                         />
+                        <Tags mode='textarea'
+                            // autofocus={true}
+                              className='tagsInput'
+                              name='tags'
+                              settings={tagifySettings}
+                              initialValue={data.snippet.tags && data.snippet.tags.join(', ')}/>
+
                     </Form.Field>
                     <Form.Field>
                         <label>Snippet</label>
-
                     </Form.Field>
                     <Form.Field>
                         <Grid>

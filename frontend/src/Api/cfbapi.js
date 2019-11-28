@@ -48,15 +48,13 @@ export default class ClifoobarApi {
 
 
     getSnippets({query, page, page_size, order_by}) {
-        let queryPart = "?";
-
-        queryPart += query ? "&q=" + query : "";
-        queryPart += order_by ? "&order_by=" + order_by : "";
-        queryPart += "&page=" + page;
-        queryPart += "&page_size=" + page_size;
-
-
-        return this.apiInstance.get("/snippets/" + queryPart);
+        let params = {
+            q: query,
+            page: page,
+            page_size: page_size,
+            order_by: order_by,
+        };
+        return this.apiInstance.get('/snippets', {params: params});
     }
 
     getSnippet(id) {
@@ -67,11 +65,12 @@ export default class ClifoobarApi {
         return this.apiInstance.post("/snippets/" + id + "/vote");
     }
 
-    saveSnippet({name, description, body, language, personal, id = null}, editMode = false) {
+    saveSnippet({name, description, body, language, personal, tags, id = null}, editMode = false) {
         let bodyFormData = new FormData();
         bodyFormData.set('name', name);
         bodyFormData.set('description', description);
         bodyFormData.set('body', body);
+        bodyFormData.set('tags', JSON.stringify(tags));
         bodyFormData.set('language', language);
         bodyFormData.set('personal', personal);
 
@@ -90,6 +89,9 @@ export default class ClifoobarApi {
 
     }
 
+    getTags() {
+        return this.apiInstance.get("/tags/");
+    }
 
     async login({username, password}) {
         let bodyFormData = new FormData();

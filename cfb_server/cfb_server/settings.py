@@ -44,6 +44,10 @@ INSTALLED_APPS += [
 
     # Django REST Framework
     'rest_framework',
+
+    # Tags
+    'taggit',
+    'taggit_serializer',
 ]
 
 # Custom apps
@@ -57,6 +61,10 @@ INSTALLED_APPS += [
 ]
 
 AUTH_USER_MODEL = 'users.User'
+
+# Taggit settings
+TAGGIT_CASE_INSENSITIVE = True
+# Taggit settings
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

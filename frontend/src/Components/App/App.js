@@ -2,7 +2,7 @@ import React, {useContext, useEffect} from 'react';
 import {AppContext} from "../../Context/AppContext";
 import SnippetsList from "../Snippets/SnippetsList";
 import Header from "../Header/Header";
-import {Container, Segment} from "semantic-ui-react";
+import {Container} from "semantic-ui-react";
 import {ActionsContext} from "../../Context/ActionsContext";
 
 function App() {
@@ -22,6 +22,7 @@ function App() {
                 page_size: appState.snippetsPageSize,
                 order_by: appState.order_by,
             });
+            appActions.updateTags();
         }
     }, [appActions, appState.activeModal, appState.order_by, appState.snippetsActivePage, appState.snippetsPageSize, appState.snippetsQuery]);
 

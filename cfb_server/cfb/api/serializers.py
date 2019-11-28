@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from taggit.models import Tag
+from taggit_serializer.serializers import TaggitSerializer, TagListSerializerField
 
 from cfb.models import Snippet
 from users.models import User
@@ -30,11 +32,19 @@ class UserShortSerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
 
-class SnippetSerializer(serializers.ModelSerializer):
+class SnippetSerializer(TaggitSerializer, serializers.ModelSerializer):
     author = UserShortSerializer(required=False)
+    tags = TagListSerializerField()
 
     class Meta:
         model = Snippet
-        fields = ['id', 'author', 'created', 'name', 'description', 'body', 'language', 'popularity', 'personal']
+        fields = ['id', 'author', 'created', 'name', 'description',
+                  'body', 'language', 'popularity', 'personal', 'tags']
 
         read_only_fields = ['created', 'popularity', 'author']
+
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ['name']
