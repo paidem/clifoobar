@@ -7,7 +7,7 @@ import {ActionsContext} from "../../Context/ActionsContext";
 
 function App() {
     // Context
-    const [appState,] = useContext(AppContext);
+    const [appState, setAppState] = useContext(AppContext);
     const [appActions,] = useContext(ActionsContext);
 
     useEffect(() => {
@@ -29,13 +29,13 @@ function App() {
     return (
         <div className="App">
             {appState.activeModal}
-            <Container style={{paddingBottom:'10px'}}>
+            <Container style={{paddingBottom: '10px'}}>
                 <Header/>
             </Container>
             <Container>
                 <SnippetsList items={appState.snippets}/>
             </Container>
-            <Container style={{paddingBottom:"40px"}}>
+            <Container style={{paddingBottom: "40px"}}>
             </Container>
         </div>
     );

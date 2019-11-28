@@ -154,9 +154,10 @@ function Header() {
                     <Dropdown
                         inline
                         options={orderOptions}
-                        defaultValue={orderOptions[0].value}
+                        defaultValue={localStorage.getItem("order_by") || orderOptions[0].value}
                         onChange={(event, eventData) => {
                             setAppState(s => ({...s, order_by: eventData.value}));
+                            localStorage.setItem('order_by', eventData.value)
                         }}
                     />
                     &nbsp;
@@ -164,9 +165,10 @@ function Header() {
                     <Dropdown
                         inline
                         options={pageSizeOptions}
-                        defaultValue={appState.snippetsPageSize.toString()}
+                        defaultValue={localStorage.getItem("snippetsPageSize") ||  '10'}
                         onChange={(event, eventData) => {
                             setAppState(s => ({...s, snippetsPageSize: eventData.value}));
+                            localStorage.setItem('snippetsPageSize', eventData.value)
                         }}
                     />
                 </div>
