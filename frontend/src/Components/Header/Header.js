@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState, useRef} from 'react';
 import {AppContext} from "../../Context/AppContext";
 import {ActionsContext} from "../../Context/ActionsContext";
-import {Button, Container, Divider, Form, Grid, Icon, Input, Label, Segment} from "semantic-ui-react";
+import {Button, Container, Divider, Form, Grid, Icon, Input, Label, Segment, SegmentGroup} from "semantic-ui-react";
 import SnippetModal from "../Modals/SnippetModal";
 import LoginForm from "./LoginForm";
 
@@ -41,10 +41,9 @@ function Header() {
     }, [appActions, appState.user]);
 
     return (
-
-        <Segment>
-            <Grid stackable divided>
-                <Grid.Row>
+        <SegmentGroup>
+            <Segment>
+                <Grid stackable divided>
                     <Grid.Column computer={10}>
                         <Input fluid size='small' fluid icon placeholder='Search...'
                                value={search}
@@ -73,7 +72,8 @@ function Header() {
                         <div style={{float: "right"}}>
                             {appState.user ?
                                 <Button animated='fade' color='green' onClick={() => appActions.logout()}>
-                                    <Button.Content visible color='green'> {appState.user.username}</Button.Content>
+                                    <Button.Content visible
+                                                    color='green'> {appState.user.username}</Button.Content>
                                     <Button.Content hidden color='red'>Logout</Button.Content>
                                 </Button>
                                 :
@@ -88,16 +88,20 @@ function Header() {
                             }
                         </div>
                     </Grid.Column>
-                </Grid.Row>
-                {(!appState.user && showLogin) &&
-                <Grid.Row>
-                    <Grid.Column computer={12}>
+                </Grid>
+            </Segment>
+            {(!appState.user && showLogin) &&
+            <Segment>
+                <Grid stackable divided>
+                    <Grid.Column computer={10}>
+                    </Grid.Column>
+                    <Grid.Column computer={6}>
                         <LoginForm handleLoginSuccess={() => setShowLogin(false)}/>
                     </Grid.Column>
-                </Grid.Row>
-                }
-            </Grid>
-        </Segment>
+                </Grid>
+            </Segment>}
+        </SegmentGroup>
+
     )
 }
 
