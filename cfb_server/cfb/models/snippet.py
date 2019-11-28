@@ -2,13 +2,19 @@ from django.db import models
 from taggit.managers import TaggableManager
 import uuid
 
-from taggit.models import TaggedItemBase
+from taggit.models import TaggedItemBase, GenericUUIDTaggedItemBase
 
 from users.models import User
 
 
-class TaggedSnippet(TaggedItemBase):
-    content_object = models.ForeignKey('Snippet', on_delete=models.CASCADE)
+class UUIDTaggedItem(GenericUUIDTaggedItemBase, TaggedItemBase):
+    # If you only inherit GenericUUIDTaggedItemBase, you need to define
+    # a tag field. e.g.
+    # tag = models.ForeignKey(Tag, related_name="uuid_tagged_items", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Tag"
+        verbose_name_plural = "Tags"
 
 
 class Snippet(models.Model):
@@ -27,8 +33,8 @@ class Snippet(models.Model):
     personal = models.BooleanField(default=False)
 
     # TODO: Tags
-    tags = TaggableManager(through=TaggedSnippet)
-
+    # tags = TaggableManager(through=TaggedSnippet)
+    tags = TaggableManager(through=UUIDTaggedItem)
     # TODO: Versioning
 
     def __str__(self):
