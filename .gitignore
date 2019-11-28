@@ -110,3 +110,5 @@ venv.bak/
 data*.json
 
 local/
+**/ldap_config.py
+**/tmp
