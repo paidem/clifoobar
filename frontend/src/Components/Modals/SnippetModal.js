@@ -119,13 +119,15 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
         updateRows(eventData);
     };
 
-    const handleDelete = () => {
+    const handleDelete = (e) => {
+        e.preventDefault();
         appActions.deleteSnippet(data.snippet.id)
             .then(response => handleClose())
             .catch(handleApiError)
     };
 
-    const handleDeleteCancel = () => {
+    const handleDeleteCancel = (e) => {
+        e.preventDefault();
         setDeleteConfirmationActive(false);
     };
 
