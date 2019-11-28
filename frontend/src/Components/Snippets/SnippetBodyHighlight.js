@@ -31,7 +31,7 @@ function getStyle(snippet) {
 
     let lang = snippet.language.toLowerCase();
 
-    if (['text', 'bash', 'shell'].includes(lang)) {
+    if (['text', 'bash', 'shell', 'dos'].includes(lang)) {
         return agate;
     }
 

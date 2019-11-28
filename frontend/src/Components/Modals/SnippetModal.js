@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState, useCallback} from 'react';
 import {
     Button,
-    Checkbox, Container,
+    Checkbox, Container, Divider,
     Dropdown,
     Form,
     Grid,
@@ -20,15 +20,39 @@ import SnippetBodyHighlight from "../Snippets/SnippetBodyHighlight";
 import Tags from '@yaireo/tagify/dist/react.tagify'
 
 const languageOptions = [
+    {key: 'accesslog', value: 'accesslog', text: 'accesslog'},
+    {key: 'apache', value: 'apache', text: 'apache'},
+    {key: 'autohotkey', value: 'autohotkey', text: 'autohotkey'},
     {key: 'bash', value: 'bash', text: 'Bash'},
-    {key: 'sql', value: 'sql', text: 'SQL'},
+    {key: 'cpp', value: 'cpp', text: 'C++'},
+    {key: 'cs', value: 'cs', text: 'C#'},
+    {key: 'dockerfile', value: 'dockerfile', text: 'dockerfile'},
+    {key: 'dos', value: 'dos', text: 'dos'},
+    {key: 'go', value: 'go', text: 'go'},
     {key: 'java', value: 'java', text: 'Java'},
     {key: 'javascript', value: 'javascript', text: 'JavaScript'},
+    {key: 'json', value: 'json', text: 'JSON'},
+    {key: 'kotlin', value: 'kotlin', text: 'kotlin'},
+    {key: 'less', value: 'less', text: 'LESS'},
+    {key: 'markdown', value: 'markdown', text: 'markdown'},
+    {key: 'nginx', value: 'nginx', text: 'nginx'},
+    {key: 'objectivec', value: 'objectivec', text: 'objectivec'},
+    {key: 'pgsql', value: 'pgsql', text: 'pgsql'},
+    {key: 'php', value: 'php', text: 'php'},
+    {key: 'plaintext', value: 'plaintext', text: 'plaintext'},
+    {key: 'properties', value: 'properties', text: 'properties'},
     {key: 'python', value: 'python', text: 'Python'},
-    {key: 'cpp', value: 'cpp', text: 'C++'},
+    {key: 'ruby', value: 'ruby', text: 'Ruby'},
+    {key: 'scss', value: 'scss', text: 'SCSS'},
     {key: 'shell', value: 'shell', text: 'Shell'},
+    {key: 'sql', value: 'sql', text: 'SQL'},
+    {key: 'swift', value: 'swift', text: 'Swift'},
     {key: 'text', value: 'text', text: 'Text'},
-
+    {key: 'typescript', value: 'typescript', text: 'Typescript'},
+    {key: 'vbnet', value: 'vbnet', text: 'VB.Net'},
+    {key: 'vbscript', value: 'vbscript', text: 'VBscript'},
+    {key: 'xml', value: 'xml', text: 'XML'},
+    {key: 'yaml', value: 'yaml', text: 'Yaml'},
 ];
 
 const snippetDefaultValues = {
@@ -181,16 +205,27 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                             name='name'
                             autoFocus={true}/>
                     </Form.Field>
-                    <Form.Field>
-                        <label>Personal snippet</label>
-                        <Checkbox toggle
-                                  checked={snippetData.personal}
-                                  onChange={(event, eventData) => {
-                                      console.log(eventData);
-                                      setSnippetData(s => ({...s, personal: eventData.checked}))
-                                  }}
-                        />
-                    </Form.Field>
+                    <Form.Group widths='equal'>
+                        <Form.Field>
+                            <label>Tags</label>
+                            <Tags mode='textarea'
+                                // autofocus={true}
+                                  className='tagsInput'
+                                  name='tags'
+                                  settings={tagifySettings}
+                                  initialValue={data && data.snippet && data.snippet.tags && data.snippet.tags.join(', ')}/>
+                        </Form.Field>
+                        <Form.Field>
+                            <label>Personal snippet</label>
+                            <Checkbox toggle
+                                      checked={snippetData.personal}
+                                      onChange={(event, eventData) => {
+                                          console.log(eventData);
+                                          setSnippetData(s => ({...s, personal: eventData.checked}))
+                                      }}
+                            />
+                        </Form.Field>
+                    </Form.Group>
                     <Form.Field>
                         <label>Description</label>
                         <TextArea
@@ -200,12 +235,7 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                             rows={rows.description}
                             style={{fontFamily: "monospace"}}
                         />
-                        <Tags mode='textarea'
-                            // autofocus={true}
-                              className='tagsInput'
-                              name='tags'
-                              settings={tagifySettings}
-                              initialValue={data.snippet.tags && data.snippet.tags.join(', ')}/>
+
 
                     </Form.Field>
                     <Form.Field>
@@ -213,7 +243,7 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                     </Form.Field>
                     <Form.Field>
                         <Grid>
-                            <Grid.Row columns={2} divided>
+                            <Grid.Row columns={2}>
                                 <Grid.Column>
                                     <Dropdown
                                         clearable
