@@ -22,12 +22,7 @@ function App() {
                 page_size: appState.snippetsPageSize,
             });
         }
-        else
-        {
-            console.log("Modal is active! not updating")
-        }
     }, [appActions, appState.activeModal, appState.snippetsActivePage, appState.snippetsPageSize, appState.snippetsQuery]);
-
 
     return (
         <div className="App">
@@ -36,9 +31,7 @@ function App() {
                 <Header/>
             </Container>
             <Container style={{paddingTop: "30px"}}>
-                
                 <SnippetsList items={appState.snippets}/>
-                
             </Container>
         </div>
     );

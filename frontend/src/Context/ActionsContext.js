@@ -48,6 +48,10 @@ const ActionsProvider = (props) => {
         return appState.api.saveSnippet(props, editMode);
     };
 
+    const deleteSnippet = (id, callback) => {
+        return appState.api.deleteSnippet(id, callback);
+    };
+
     const login = (props) => {
         return appState.api.login(props)
             .then(response => {
@@ -133,6 +137,7 @@ const ActionsProvider = (props) => {
         login: login,
         logout: logout,
         voteForSnippet: voteForSnippet,
+        deleteSnippet: deleteSnippet
     };
 
     const [state, setState] = useState(defaultState);

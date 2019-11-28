@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState, useCallback} from 'react';
 import {
     Button,
-    Checkbox,
+    Checkbox, Container,
     Dropdown,
     Form,
     Grid,
@@ -48,11 +48,22 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
     const [appActions,] = useContext(ActionsContext);
     const [error, setError] = useState(null);
     const [preview, setPreview] = useState(false);
+    const [deleteConfirmationActive, setDeleteConfirmationActive] = useState(false);
 
 
     const [snippetData, setSnippetData] = useState(snippetDefaultValues);
     const [rows, setRows] = useState(defaultRows);
 
+    const handleApiError = (error) => {
+        if (error.response && error.response.data && error.response.data.detail) {
+            setError(error.response.data.detail);
+        } else if (error.response && error.response.data) {
+            setError(JSON.stringify(error.response.data));
+        } else {
+            // objects are not valid react child and we render error verbatim, so to make it string, concat
+            setError("" + error);
+        }
+    }
 
     const updateRows = useCallback(({name, value}) => {
         if (defaultRows[name] > 0) {
@@ -72,18 +83,7 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
             .then(response => {
                 handleClose();
             })
-            .catch(error => {
-                if (error.response && error.response.data && error.response.data.detail) {
-                    setError(error.response.data.detail);
-                } else if (error.response && error.response.data){
-                    setError(JSON.stringify(error.response.data));
-                }
-                else {
-                    // objects are not valid react child and we render error verbatim, so to make it string, concat
-                    setError("" + error);
-                }
-            })
-
+            .catch(handleApiError)
     };
 
     const handleInputChange = (event, eventData) => {
@@ -91,6 +91,16 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
         update[eventData.name] = eventData.value;
         setSnippetData(s => ({...s, ...update}));
         updateRows(eventData);
+    };
+
+    const handleDelete = () => {
+        appActions.deleteSnippet(data.snippet.id)
+            .then(response => handleClose())
+            .catch(handleApiError)
+    };
+
+    const handleDeleteCancel = () => {
+        handleClose();
     };
 
     // Load data if we are in edit mode
@@ -198,12 +208,33 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                             </Grid.Row>
                         </Grid>
                     </Form.Field>
-                    <Button type='submit' color='black' basic>
-                        <Icon name='checkmark'/> Create
-                    </Button>
-                    <Button color='grey' onClick={handleClose}>
-                        <Icon name='delete'/> Cancel
-                    </Button>
+                    <Container fluid style={{display: "flex", justifyContent: "space-between"}}>
+                        <div>
+                            <Button type='submit' color='green'>
+                                <Icon name='checkmark'/> {(data && data.edit) ? 'Save' : 'Create'}
+                            </Button>
+                            <Button
+                                color='grey'
+                                basic
+                                onClick={handleClose}>
+                                <Icon name='stop'/> Cancel
+                            </Button>
+                        </div>
+                        {deleteConfirmationActive ?
+                            <Button.Group>
+                                <Button onClick={handleDeleteCancel}>Cancel</Button>
+                                <Button.Or/>
+                                <Button negative onClick={handleDelete}>Delete</Button>
+                            </Button.Group>
+                            :
+                            <Button
+                                color='red'
+                                disabled={!data || !data.edit}
+                                onClick={() => setDeleteConfirmationActive(true)}>
+                                <Icon name='delete'/> Delete
+                            </Button>
+                        }
+                    </Container>
                 </Form>
             </Modal.Content>
         </ModalBase>

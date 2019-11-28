@@ -101,7 +101,7 @@ function Snippet({snippet}) {
                                     </div>
                                 </Grid.Column>
                                 <Grid.Column mobile={16} tablet={3} computer={2}>
-                                    {(appState.user && snippet.author && snippet.author.id === appState.user.id) &&
+                                    {(appState.user && (appState.user.is_superuser || snippet.author && snippet.author.id === appState.user.id)) &&
                                     <Button
                                         color='grey'
                                         content=''

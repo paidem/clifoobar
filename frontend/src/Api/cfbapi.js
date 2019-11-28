@@ -80,6 +80,15 @@ export default class ClifoobarApi {
         }
     };
 
+    deleteSnippet(id, callback) {
+        return this.apiInstance.delete("/snippets/" + id + "/")
+            .then(() => {
+                callback && callback();
+            })
+
+    }
+
+
     async login({username, password}) {
         let bodyFormData = new FormData();
         bodyFormData.set('username', username);
