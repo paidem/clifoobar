@@ -43,3 +43,7 @@ pre {
 .snippetTags {
   padding-top: 10px;
 }
+
+.ui.form .inline.fields {
+  margin: 0!important;
+}

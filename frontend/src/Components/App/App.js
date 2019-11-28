@@ -29,10 +29,10 @@ function App() {
     return (
         <div className="App">
             {appState.activeModal}
-            <Container>
+            <Container style={{paddingBottom:'10px'}}>
                 <Header/>
             </Container>
-            <Container style={{paddingTop: "30px"}}>
+            <Container>
                 <SnippetsList items={appState.snippets}/>
             </Container>
             <Container style={{paddingBottom:"40px"}}>

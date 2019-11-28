@@ -14,8 +14,8 @@ function LoginForm() {
     };
 
     return (
-        <Form onSubmit={handleLogin} >
-            <Form.Group>
+        <Form size='tiny' onSubmit={handleLogin} style={{margin:'0 10px'}}>
+            <Form.Group inline>
                 <Form.Input
                     error={appState.userLoginFailed}
                     label='Username'
@@ -35,8 +35,9 @@ function LoginForm() {
                         setPassword(data.value)
                     }}
                 />
+                <Form.Button size='tiny' content='Submit'/>
             </Form.Group>
-            <Form.Button content='Submit'/>
+
         </Form>
     );
 }

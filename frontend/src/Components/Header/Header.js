@@ -116,9 +116,22 @@ function Header() {
 
     return (
         <SegmentGroup>
-            <Segment>
-                <Grid stackable divided>
-                    <Grid.Column computer={10}>
+            <Segment
+                style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.2em'}}>
+                <div>
+                    <Button
+                        size='tiny'
+                        color='green'
+                        disabled={!appState.user}
+                        onClick={() => appActions.openModal({type: SnippetModal, data: null})}
+                    >
+                        New
+                    </Button>
+                    {/*}*/}
+                </div>
+                <div style={{flexGrow: 1}}>
+                    {(!appState.user && showLogin) ?
+                        <LoginForm handleLoginSuccess={() => setShowLogin(false)}/> :
                         <Input fluid size='small' icon placeholder='Search...'
                                ref={inputRef}
                                value={search}
@@ -135,67 +148,49 @@ function Header() {
                             <input/>
                             <Icon name='times circle outline' size='large' link
                                   onClick={() => clearSearch()}/>
-                        </Input>
-                    </Grid.Column>
-                    <Grid.Column computer={6}>
-                        {appState.user &&
-                        <Button
-                            onClick={() => appActions.openModal({type: SnippetModal, data: null})}
-                        >
-                            New
-                        </Button>}
-                        <div style={{float: "right"}}>
-                            {appState.user ?
-                                <Button animated='fade' color='green' onClick={() => appActions.logout()}>
-                                    <Button.Content visible
-                                                    color='green'> {appState.user.username}</Button.Content>
-                                    <Button.Content hidden color='red'>Logout</Button.Content>
-                                </Button>
-                                :
-
-                                <Button onClick={() => {
+                        </Input>}
+                </div>
+                <div style={{padding: '0 10px'}}>
+                    <Dropdown
+                        inline
+                        options={orderOptions}
+                        defaultValue={orderOptions[0].value}
+                        onChange={(event, eventData) => {
+                            setAppState(s => ({...s, order_by: eventData.value}));
+                        }}
+                    />
+                    &nbsp;
+                    &nbsp;
+                    <Dropdown
+                        inline
+                        options={pageSizeOptions}
+                        defaultValue={appState.snippetsPageSize.toString()}
+                        onChange={(event, eventData) => {
+                            setAppState(s => ({...s, snippetsPageSize: eventData.value}));
+                        }}
+                    />
+                </div>
+                <div>
+                    {appState.user ?
+                        <Button size='tiny' animated='fade' color='grey' onClick={() => appActions.logout()}>
+                            <Button.Content visible>
+                                {appState.user.username}
+                            </Button.Content>
+                            <Button.Content hidden>
+                                Logout
+                            </Button.Content>
+                        </Button>
+                        :
+                        <Button size='tiny'
+                                onClick={() => {
                                     setShowLogin(!showLogin);
                                     setAppState(s => ({...s, userLoginFailed: false}));
                                 }}>
-                                    {showLogin ? "Cancel" : "Login"}
-                                </Button>
+                            {showLogin ? "Cancel" : "Login"}
+                        </Button>
 
-                            }
-                        </div>
-                    </Grid.Column>
-                </Grid>
-            </Segment>
-            {(!appState.user && showLogin) &&
-            <Segment>
-                <Grid stackable divided>
-                    <Grid.Column computer={10}>
-                    </Grid.Column>
-                    <Grid.Column computer={6}>
-                        <LoginForm handleLoginSuccess={() => setShowLogin(false)}/>
-                    </Grid.Column>
-                </Grid>
-            </Segment>}
-            <Segment textAlign='right'>
-
-                <Dropdown
-                    inline
-                    options={orderOptions}
-                    defaultValue={orderOptions[0].value}
-                    onChange={(event, eventData) => {
-                        setAppState(s => ({...s, order_by: eventData.value}));
-                    }}
-                />
-                &nbsp;
-                &nbsp;
-                &nbsp;
-                <Dropdown
-                    inline
-                    options={pageSizeOptions}
-                    defaultValue={appState.snippetsPageSize.toString()}
-                    onChange={(event, eventData) => {
-                        setAppState(s => ({...s, snippetsPageSize: eventData.value}));
-                    }}
-                />
+                    }
+                </div>
             </Segment>
         </SegmentGroup>
 
