@@ -146,6 +146,7 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
     // callbacks for all of Tagify's events:
     const onTagifyAdd = e => {
         setSnippetData(sd => {
+            sd.tags = sd.tags || []; // if sd.tags does not exist - create it
             sd.tags.push(e.detail.data.value);
             return sd;
         });
