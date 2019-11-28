@@ -75,8 +75,9 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
     const [preview, setPreview] = useState(false);
     const [deleteConfirmationActive, setDeleteConfirmationActive] = useState(false);
 
-
-    const [snippetData, setSnippetData] = useState(snippetDefaultValues);
+    // We HAVE to set empty array here, otherway we are reusing tags from previous snippt, as array are by reference
+    // DO NOT optimize and DO NOT move "tags: []" to snippetDefaultValues
+    const [snippetData, setSnippetData] = useState({...snippetDefaultValues, tags: []});
     const [rows, setRows] = useState(defaultRows);
 
     const handleApiError = (error) => {
