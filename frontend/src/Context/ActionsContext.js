@@ -154,12 +154,21 @@ const ActionsProvider = (props) => {
             })
     };
 
+    const updateLanguages = () => {
+               appState.api.getLanguages()
+            .then(response => {
+                let languages = response.data.map(lang =>  ({key: lang.code, value: lang.code, text: lang.name}));
+                updateAppState({languages: languages});
+            }) 
+    }
+    
     const defaultState = {
         addTagToSearch: addTagToSearch,
         saveSnippet: saveSnippet,
         checkLoginStatus: checkLoginStatus,
         updateSnippets: updateSnippets,
         updateTags: updateTags,
+        updateLanguages: updateLanguages,
         openModal: openModal,
         login: login,
         logout: logout,

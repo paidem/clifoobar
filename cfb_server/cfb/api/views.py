@@ -7,8 +7,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from taggit.models import Tag
 
-from cfb.models import Snippet
-from .serializers import UserSerializer, SnippetSerializer, TagSerializer
+from cfb.models import Snippet, Language
+from .serializers import UserSerializer, SnippetSerializer, TagSerializer, LanguageSerializer
 from users.models import User
 
 
@@ -123,3 +123,8 @@ def snippets_i_used_it_view(request, uuid):
 class TagsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TagSerializer
     queryset = Tag.objects.all()
+
+
+class LanguageViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = LanguageSerializer
+    queryset = Language.objects.all()

@@ -19,42 +19,6 @@ import {sortArrayOfObjects} from "../../Utils/sortArrayOfObjects";
 import SnippetBodyHighlight from "../Snippets/SnippetBodyHighlight";
 import Tags from '@yaireo/tagify/dist/react.tagify'
 
-const languageOptions = [
-    {key: 'accesslog', value: 'accesslog', text: 'accesslog'},
-    {key: 'apache', value: 'apache', text: 'apache'},
-    {key: 'autohotkey', value: 'autohotkey', text: 'autohotkey'},
-    {key: 'bash', value: 'bash', text: 'Bash'},
-    {key: 'cpp', value: 'cpp', text: 'C++'},
-    {key: 'cs', value: 'cs', text: 'C#'},
-    {key: 'dockerfile', value: 'dockerfile', text: 'dockerfile'},
-    {key: 'dos', value: 'dos', text: 'dos'},
-    {key: 'go', value: 'go', text: 'go'},
-    {key: 'java', value: 'java', text: 'Java'},
-    {key: 'javascript', value: 'javascript', text: 'JavaScript'},
-    {key: 'json', value: 'json', text: 'JSON'},
-    {key: 'kotlin', value: 'kotlin', text: 'kotlin'},
-    {key: 'less', value: 'less', text: 'LESS'},
-    {key: 'markdown', value: 'markdown', text: 'markdown'},
-    {key: 'nginx', value: 'nginx', text: 'nginx'},
-    {key: 'objectivec', value: 'objectivec', text: 'objectivec'},
-    {key: 'pgsql', value: 'pgsql', text: 'pgsql'},
-    {key: 'php', value: 'php', text: 'php'},
-    {key: 'plaintext', value: 'plaintext', text: 'plaintext'},
-    {key: 'properties', value: 'properties', text: 'properties'},
-    {key: 'python', value: 'python', text: 'Python'},
-    {key: 'ruby', value: 'ruby', text: 'Ruby'},
-    {key: 'scss', value: 'scss', text: 'SCSS'},
-    {key: 'shell', value: 'shell', text: 'Shell'},
-    {key: 'sql', value: 'sql', text: 'SQL'},
-    {key: 'swift', value: 'swift', text: 'Swift'},
-    {key: 'text', value: 'text', text: 'Text'},
-    {key: 'typescript', value: 'typescript', text: 'Typescript'},
-    {key: 'vbnet', value: 'vbnet', text: 'VB.Net'},
-    {key: 'vbscript', value: 'vbscript', text: 'VBscript'},
-    {key: 'xml', value: 'xml', text: 'XML'},
-    {key: 'yaml', value: 'yaml', text: 'Yaml'},
-];
-
 const snippetDefaultValues = {
     name: "",
     description: "",
@@ -254,7 +218,7 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                                         search
                                         selection
                                         value={snippetData.language}
-                                        options={sortArrayOfObjects(languageOptions, "text")}
+                                        options={sortArrayOfObjects(appState.languages, "text")}
                                         onChange={(event, eventData) => {
                                             setSnippetData(s => ({...s, language: eventData.value}))
                                         }}

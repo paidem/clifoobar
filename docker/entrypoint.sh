@@ -30,7 +30,12 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 if not User.objects.filter(username='${SUPERUSER_NAME}'):
     u=User.objects.create_superuser('${SUPERUSER_NAME}', '${SUPERUSER_EMAIL}', '${SUPERUSER_PASSWORD}')
+    self.stdout.write("\nCreating user {} ({})  with password '{}'.".format('${SUPERUSER_NAME}', '${SUPERUSER_EMAIL}','${SUPERUSER_PASSWORD}'))
 END
+
+# import languages
+# hide output in case we have
+python ./manage.py loaddata -i fixtures/languages.json 2>&1 >/dev/null
 
 # copy static files
 python ./manage.py collectstatic --no-input

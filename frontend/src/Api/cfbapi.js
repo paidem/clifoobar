@@ -103,6 +103,9 @@ export default class ClifoobarApi {
         return this.apiInstance.post("/admin/login/", bodyFormData, {baseURL: "/"});
     }
 
+    getLanguages () {
+        return this.apiInstance.get("/languages/");
+    }
     logout() {
         return this.apiInstance.get("/admin/logout/", {baseURL: "/"})
     }

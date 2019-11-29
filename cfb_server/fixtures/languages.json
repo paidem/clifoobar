@@ -1,0 +1,240 @@
+[
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "accesslog",
+      "name": "accesslog"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "apache",
+      "name": "apache"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "autohotcode",
+      "name": "autohotcode"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "bash",
+      "name": "Bash"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "cpp",
+      "name": "C++"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "cs",
+      "name": "C#"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "dockerfile",
+      "name": "dockerfile"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "dos",
+      "name": "dos"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "go",
+      "name": "go"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "java",
+      "name": "Java"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "javascript",
+      "name": "JavaScript"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "json",
+      "name": "JSON"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "kotlin",
+      "name": "kotlin"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "less",
+      "name": "LESS"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "markdown",
+      "name": "markdown"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "nginx",
+      "name": "nginx"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "objectivec",
+      "name": "objectivec"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "pgsql",
+      "name": "pgsql"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "php",
+      "name": "php"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "plainname",
+      "name": "plainname"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "properties",
+      "name": "properties"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "powershell",
+      "name": "PowerShell"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "python",
+      "name": "Python"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "ruby",
+      "name": "Ruby"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "scss",
+      "name": "SCSS"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "shell",
+      "name": "Shell"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "sql",
+      "name": "SQL"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "swift",
+      "name": "Swift"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "name",
+      "name": "name"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "typescript",
+      "name": "Typescript"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "vbnet",
+      "name": "VB.Net"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "vbscript",
+      "name": "VBscript"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "xml",
+      "name": "XML"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "yaml",
+      "name": "Yaml"
+    }
+  }
+]

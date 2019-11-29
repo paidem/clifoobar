@@ -23,6 +23,7 @@ function App() {
                 order_by: appState.order_by,
             });
             appActions.updateTags();
+            appActions.updateLanguages();
         }
     }, [appActions, appState.activeModal, appState.order_by, appState.snippetsActivePage, appState.snippetsPageSize, appState.snippetsQuery]);
 

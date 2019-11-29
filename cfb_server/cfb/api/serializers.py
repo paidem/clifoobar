@@ -2,7 +2,7 @@ from rest_framework import serializers
 from taggit.models import Tag
 from taggit_serializer.serializers import TaggitSerializer, TagListSerializerField
 
-from cfb.models import Snippet
+from cfb.models import Snippet, Language
 from users.models import User
 
 
@@ -48,3 +48,9 @@ class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ['name']
+
+
+class LanguageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Language
+        fields = ['code', 'name']
