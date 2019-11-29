@@ -133,12 +133,16 @@ const ActionsProvider = (props) => {
     const addTagToSearch = (tag) => {
         setAppState(state => {
             let update = {};
-            let query = state.snippetsQuery;
-            if (query && query.length > 0) {
-                update.snippetsQuery = query.trim() + ' ' + tag + ' ';
+
+            // Modify search input
+            if (state.snippetsQuery && state.snippetsQuery.length > 0) {
+                update.snippetsQueryInput = state.snippetsQuery.trim() + ' #' + tag + ' ';
             } else {
-                update.snippetsQuery = tag + ' ';
+                update.snippetsQueryInput = '#' + tag + ' ';
             }
+            
+            // Modify effective query string
+            update.snippetsQuery = update.snippetsQueryInput;
 
             // our updated snippet list could be shorter with added tag, so set page to 1
             update.snippetsActivePage = 1;

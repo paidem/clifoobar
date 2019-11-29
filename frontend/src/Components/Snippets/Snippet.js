@@ -39,7 +39,8 @@ function Snippet({snippet}) {
     };
 
     const addTagToSearch = (tag) => {
-        appActions.addTagToSearch('#' + tag);
+        appActions.addTagToSearch(tag);
+        appState.snippetsQueryInputRef.current.focus();
     };
 
     return (

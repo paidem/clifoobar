@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import cfbapi from "../Api/cfbapi";
 
 const api = new cfbapi();
@@ -14,6 +14,8 @@ const AppProvider = (props) => {
         snippets: [],
         snippetsLoading: false,
         snippetsQuery: null,
+        snippetsQueryInput: "",
+        snippetsQueryInputRef: useRef(),
         snippetsPageSize: 10,
         snippetsActivePage: 1,
         snippetsTotal: 0,

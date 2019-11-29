@@ -70,31 +70,29 @@ function Header() {
     // Context
     const [appState, setAppState] = useContext(AppContext);
     const [appActions,] = useContext(ActionsContext);
-    const [showLogin, setShowLogin] = useState(false);
 
-    const [search, setSearch] = useState("");
+    // Flag if login form should be shown instead of search
+    const [showLogin, setShowLogin] = useState(false);
 
     // Timer which controls timeot for display size update
     const updateAppQueryTimer = useRef(0);
 
-    const inputRef = useRef();
-
+    // Search input callbak
     const onInputChanged = (inputValue) => {
         if (updateAppQueryTimer.current) {
             clearTimeout(updateAppQueryTimer.current);
         }
 
-        setSearch(inputValue);
-
+        setAppState(state => ({...state, snippetsQueryInput: inputValue}));
+        
         updateAppQueryTimer.current = setTimeout(() => {
-            setAppState(state => ({...state, snippetsQuery: inputValue, snippetsActivePage: 1}));
-        }, 300)
+            setAppState(state => ({...state, snippetsQuery: state.snippetsQueryInput, snippetsActivePage: 1}));
+        }, 400)
 
     };
 
     const clearSearch = () => {
-        setSearch("");
-        setAppState(state => ({...state, snippetsQuery: "", snippetsActivePage: 1}));
+        setAppState(state => ({...state, snippetsQuery: "", snippetsQueryInput: "", snippetsActivePage: 1}));
     };
 
     useEffect(() => {
@@ -103,15 +101,15 @@ function Header() {
         }
     }, [appActions, appState.user]);
 
-    // Syncronize search input back from AppState
-    useEffect(() => {
-        if (appState.snippetsQuery && appState.snippetsQuery !== search && appState.snippetsQuery.length > search.length) {
-            setSearch(appState.snippetsQuery);
-
-            // if we modified input - focus input
-            inputRef.current.focus();
-        }
-    }, [appState.snippetsQuery, search]);
+    // // Syncronize search input back from AppState
+    // useEffect(() => {
+    //     if (appState.snippetsQuery && appState.snippetsQuery !== search && appState.snippetsQuery.length > search.length) {
+    //         setSearch(appState.snippetsQuery);
+    //
+    //         // if we modified input - focus input
+    //         inputRef.current.focus();
+    //     }
+    // }, [appState.snippetsQuery, search]);
 
     return (
         <SegmentGroup>
@@ -132,8 +130,9 @@ function Header() {
                     {(!appState.user && showLogin) ?
                         <LoginForm handleLoginSuccess={() => setShowLogin(false)}/> :
                         <Input fluid size='small' icon placeholder='Search...'
-                               ref={inputRef}
-                               value={search}
+                               autoFocus={true}
+                               ref={appState.snippetsQueryInputRef}
+                               value={appState.snippetsQueryInput}
                                onChange={(event) => {
                                    onInputChanged(event.target.value)
                                }}
