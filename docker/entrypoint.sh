@@ -27,15 +27,21 @@ echo "Username: ${SUPERUSER_NAME}, E-Mail: ${SUPERUSER_EMAIL}"
 
 python ./manage.py shell --interface python << END
 from django.contrib.auth import get_user_model
+from django.core.management import call_command
+from django.core.management.commands import loaddata
+from cfb.models import Language
+
 User = get_user_model()
+
 if not User.objects.filter(username='${SUPERUSER_NAME}'):
     u=User.objects.create_superuser('${SUPERUSER_NAME}', '${SUPERUSER_EMAIL}', '${SUPERUSER_PASSWORD}')
     self.stdout.write("\nCreating user {} ({})  with password '{}'.".format('${SUPERUSER_NAME}', '${SUPERUSER_EMAIL}','${SUPERUSER_PASSWORD}'))
-END
 
-# import languages
-# hide output in case we have
-python ./manage.py loaddata -i fixtures/languages.json 2>&1 >/dev/null
+
+if Language.objects.all().count() == 0:
+  self.stdout.write("\nCreating languages from {}.".format('fixtures/languages.json'))
+  call_command(loaddata.Command(), 'fixtures/languages.json')
+END
 
 # copy static files
 python ./manage.py collectstatic --no-input
