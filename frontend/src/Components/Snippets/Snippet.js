@@ -92,14 +92,14 @@ function Snippet({snippet}) {
                             </Grid.Column>
 
                         </Grid>
-                        <Divider/>
+                        <Divider className='snippetDivider'/>
 
                         <div style={{
                             display: "flex",
                             justifyContent: "space-between",
                             alignItems: "flex-start"
                         }}>
-                            <div style={{flexGrow: 1}}>
+                            <div style={{flexGrow: 1, overflow: "auto  hidden"}}>
                                 <SnippetBodyHighlight snippet={snippet}/>
                             </div>
 

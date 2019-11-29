@@ -47,3 +47,11 @@ pre {
 .ui.form .inline.fields {
   margin: 0!important;
 }
+
+pre {
+  margin: 0!important;
+}
+
+.ui.divider.snippetDivider {
+  margin: 0 0 0.4rem 0;
+}
