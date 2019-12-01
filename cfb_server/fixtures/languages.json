@@ -3,7 +3,7 @@
     "model": "cfb.language",
     "fields": {
       "code": "accesslog",
-      "name": "accesslog"
+      "name": "access log"
     }
   },
   {
@@ -16,8 +16,8 @@
   {
     "model": "cfb.language",
     "fields": {
-      "code": "autohotcode",
-      "name": "autohotcode"
+      "code": "autohotkey",
+      "name": "autohotkey"
     }
   },
   {
@@ -59,7 +59,7 @@
     "model": "cfb.language",
     "fields": {
       "code": "go",
-      "name": "go"
+      "name": "Go"
     }
   },
   {
@@ -87,14 +87,14 @@
     "model": "cfb.language",
     "fields": {
       "code": "kotlin",
-      "name": "kotlin"
+      "name": "Kotlin"
     }
   },
   {
     "model": "cfb.language",
     "fields": {
       "code": "less",
-      "name": "LESS"
+      "name": "Less"
     }
   },
   {
@@ -115,7 +115,7 @@
     "model": "cfb.language",
     "fields": {
       "code": "objectivec",
-      "name": "objectivec"
+      "name": "ObjectiveC"
     }
   },
   {
@@ -129,14 +129,14 @@
     "model": "cfb.language",
     "fields": {
       "code": "php",
-      "name": "php"
+      "name": "PHP"
     }
   },
   {
     "model": "cfb.language",
     "fields": {
-      "code": "plainname",
-      "name": "plainname"
+      "code": "plaintext",
+      "name": "plaintext"
     }
   },
   {
@@ -198,13 +198,6 @@
   {
     "model": "cfb.language",
     "fields": {
-      "code": "name",
-      "name": "name"
-    }
-  },
-  {
-    "model": "cfb.language",
-    "fields": {
       "code": "typescript",
       "name": "Typescript"
     }
@@ -220,7 +213,7 @@
     "model": "cfb.language",
     "fields": {
       "code": "vbscript",
-      "name": "VBscript"
+      "name": "VB script"
     }
   },
   {
@@ -234,7 +227,7 @@
     "model": "cfb.language",
     "fields": {
       "code": "yaml",
-      "name": "Yaml"
+      "name": "YAML"
     }
   }
 ]
