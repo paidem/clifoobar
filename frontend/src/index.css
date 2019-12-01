@@ -9,12 +9,8 @@ body {
   width: 100vw;
 }
 
-.dollarSignPrompt:before {
-  content:"$ ";
-}
-
-.arrowSignPrompt:before {
-  content:"> ";
+.App {
+  position: relative;
 }
 
 pre {

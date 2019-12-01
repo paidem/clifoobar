@@ -1,12 +1,11 @@
-import React, {useState, useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {Button, Card, Divider, Grid, Label} from "semantic-ui-react";
 import Moment from 'react-moment';
 import 'moment-timezone';
-import SnippetBodyHighlight from "./SnippetBodyHighlight";
 import {ActionsContext} from "../../Context/ActionsContext";
 import SnippetModal from "../Modals/SnippetModal";
 import {AppContext} from "../../Context/AppContext";
-
+import SnippetHighlighter from "../SnippetHighlighter/SnippetHighlighter";
 
 const defaultCopyButtonIcon = 'copy outline';
 const successCopyButtonIcon = 'thumbs up';
@@ -101,7 +100,11 @@ function Snippet({snippet}) {
                             alignItems: "flex-start"
                         }}>
                             <div style={{flexGrow: 1, overflow: "auto  hidden"}}>
-                                <SnippetBodyHighlight snippet={snippet}/>
+                                <SnippetHighlighter
+                                    value={snippet.body}
+                                    language={snippet.language}
+                                    customStyle={{maxHeight:"200px", overflowY:"auto"}}
+                                />
                             </div>
 
                             <Button
@@ -119,10 +122,7 @@ function Snippet({snippet}) {
                                 onClick={() => copyToClipboard(snippet.body)}
                                 size='medium'
                             />
-
-
                         </div>
-
                     </Card.Description>
                 </Card.Content>
             </Card>

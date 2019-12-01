@@ -1,10 +1,10 @@
-import React, {useContext, useEffect, useState, useCallback} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
     Button,
-    Checkbox, Container,
+    Checkbox,
+    Container,
     Dropdown,
     Form,
-    Grid,
     Header,
     Icon,
     Input,
@@ -16,8 +16,9 @@ import {AppContext} from "../../Context/AppContext";
 import {ActionsContext} from "../../Context/ActionsContext";
 import ModalBase from "./ModalBase";
 import {sortArrayOfObjects} from "../../Utils/sortArrayOfObjects";
-import SnippetBodyHighlight from "../Snippets/SnippetBodyHighlight";
 import Tags from '@yaireo/tagify/dist/react.tagify'
+
+import SnippetHighlighter from "../SnippetHighlighter/SnippetHighlighter";
 
 const snippetDefaultValues = {
     name: "",
@@ -27,22 +28,16 @@ const snippetDefaultValues = {
     personal: false,
 };
 
-const defaultRows = {
-    description: 2,
-    body: 5,
-};
-
 function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
     const [appState,] = useContext(AppContext);
     const [appActions,] = useContext(ActionsContext);
     const [error, setError] = useState(null);
-    const [preview, setPreview] = useState(false);
+    // const [preview, setPreview] = useState(false);
     const [deleteConfirmationActive, setDeleteConfirmationActive] = useState(false);
 
     // We HAVE to set empty array here, otherway we are reusing tags from previous snippt, as array are by reference
     // DO NOT optimize and DO NOT move "tags: []" to snippetDefaultValues
     const [snippetData, setSnippetData] = useState({...snippetDefaultValues, tags: []});
-    const [rows, setRows] = useState(defaultRows);
 
     const handleApiError = (error) => {
         if (error.response && error.response.data && error.response.data.detail) {
@@ -55,20 +50,8 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
         }
     };
 
-    const updateRows = useCallback(({name, value}) => {
-        if (defaultRows[name] > 0) {
-            let numRows = value.split(/\r\n|\r|\n/).length;
-            if (numRows > defaultRows[name]) {
-                let rowUpdate = {};
-                rowUpdate[name] = numRows;
-                setRows(r => ({...r, ...rowUpdate}));
-            }
-        }
-    }, []);
-
     const submit = (e) => {
         e.preventDefault();
-
         appActions.saveSnippet(snippetData, data && data.edit)
             .then(response => {
                 handleClose();
@@ -78,9 +61,8 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
 
     const handleInputChange = (event, eventData) => {
         let update = {};
-        update[eventData.name] = eventData.value;
+        update[event.target.name] = event.target.value;
         setSnippetData(s => ({...s, ...update}));
-        updateRows(eventData);
     };
 
     const handleDelete = (e) => {
@@ -94,18 +76,6 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
         e.preventDefault();
         setDeleteConfirmationActive(false);
     };
-
-    // const onTagifyRemove = (i) => {
-    //     let tags = snippetData.tags;
-    //     tags.splice(i, 1);
-    //     setSnippetData(s => ({...s, tags: tags}));
-    // };
-    //
-    // const onTagifyAdd = (tag) => {
-    //     let tags = snippetData.tags;
-    //     tags.concat(tag);
-    //     setSnippetData(s => ({...s, tags: tags}));
-    // };
 
     // callbacks for all of Tagify's events:
     const onTagifyAdd = e => {
@@ -145,22 +115,13 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
     useEffect(() => {
         if (data && data.edit) {
             setSnippetData(data.snippet);
-
-            // Resize textareas to fit data
-            updateRows({name: "description", value: data.snippet.description});
-            updateRows({name: "body", value: data.snippet.body});
-
-            // If we already have snippet, it's nice to show a preview
-            setPreview(true);
         }
-    }, [data, updateRows]);
-
+    }, [data]);
 
     return (
         <ModalBase size="large" handleClose={handleClose} className={snippetData.personal ? 'personal' : ''}>
             <Header icon='file code outline'
                     content={(data && data.edit ? 'Edit ' : 'New ') + (snippetData.personal ? 'personal ' : '') + 'snippet'}
-                // style={{backgroundColor:"#21ba45"}}
             />
             <Modal.Content>
                 {error && <Message negative content={error}/>}
@@ -192,6 +153,8 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                                           setSnippetData(s => ({...s, personal: eventData.checked}))
                                       }}
                             />
+                            {snippetData.personal &&
+                            <span style={{marginLeft: "10px", display: "inline-block", verticalAlign: "top"}}>This snippet will be only visible to you</span>}
                         </Form.Field>
                     </Form.Group>
                     <Form.Field>
@@ -200,62 +163,51 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                             value={snippetData.description}
                             onChange={handleInputChange}
                             name='description'
-                            rows={rows.description}
+                            rows={Math.min(10, Math.max(3, snippetData.description && snippetData.description.split(/\r\n|\r|\n/).length))}
                             style={{fontFamily: "monospace"}}
                         />
-
-
                     </Form.Field>
                     <Form.Field>
-                        <label>Snippet</label>
+                        <label style={{maxWidth: "200px", float: "left", paddingTop: "15px"}}>Snippet</label>
+                        <Dropdown
+                            clearable
+                            search
+                            selection
+                            value={snippetData.language}
+                            options={sortArrayOfObjects(appState.languages, "text").map(lang => ({
+                                key: lang.code,
+                                value: lang.code,
+                                text: lang.name
+                            }))}
+                            style={{maxWidth: "200px", marginBottom: "10px", float: "right"}}
+                            onChange={(event, eventData) => {
+                                setSnippetData(s => ({...s, language: eventData.value}))
+                            }}
+                            placeholder='Select language'
+                        />
+                        <label style={{
+                            maxWidth: "200px",
+                            float: "right",
+                            paddingTop: "15px"
+                        }}>Language&nbsp;&nbsp;&nbsp;</label>
                     </Form.Field>
                     <Form.Field>
-                        <Grid>
-                            <Grid.Row columns={2}>
-                                <Grid.Column>
-                                    <Dropdown
-                                        clearable
-                                        search
-                                        selection
-                                        value={snippetData.language}
-                                        options={sortArrayOfObjects(appState.languages, "text")}
-                                        onChange={(event, eventData) => {
-                                            setSnippetData(s => ({...s, language: eventData.value}))
-                                        }}
-                                        placeholder='Select language'
-                                    />
-                                </Grid.Column>
-                                <Grid.Column>
-                                    <Checkbox toggle
-                                              checked={preview}
-                                              onChange={(event, eventData) => {
-                                                  setPreview(eventData.checked)
-                                              }}
-                                    />
-                                    &nbsp;Preview
-                                </Grid.Column>
-                            </Grid.Row>
+                        {/*<EditableHighlightArea*/}
+                        {/*    name="body"*/}
+                        {/*    language={snippetData.language}*/}
+                        {/*    value={snippetData.body}*/}
+                        {/*    onChange={handleInputChange}*/}
+                        {/*    wrapperStyle={{height: Math.min(300, snippetData.body.split(/\r\n|\r|\n/).length*17)}}*/}
+                        {/*/>*/}
+                        <SnippetHighlighter
+                            editable={true}
+                                name="body"
+                            language={snippetData.language}
+                            value={snippetData.body}
+                            onChange={handleInputChange}
+                            wrapperStyle={{height: Math.min(300, snippetData.body.split(/\r\n|\r|\n/).length*17)}}
+                        />
 
-                            <Grid.Row columns={preview ? 2 : 1} divided>
-                                <Grid.Column>
-                                    <TextArea
-                                        value={snippetData.body}
-                                        onChange={handleInputChange}
-                                        name='body'
-                                        rows={rows.body}
-                                        style={{fontFamily: "monospace", color: "#FFFFFF", backgroundColor: "#000000"}}
-                                    />
-                                </Grid.Column>
-                                {preview &&
-                                <Grid.Column>
-                                    <div style={{lineHeight: 1.25}}>
-                                        <SnippetBodyHighlight
-                                            snippet={{body: snippetData.body, language: snippetData.language}}/>
-                                    </div>
-                                </Grid.Column>
-                                }
-                            </Grid.Row>
-                        </Grid>
                     </Form.Field>
                     <Container fluid style={{display: "flex", justifyContent: "space-between"}}>
                         <div>
@@ -280,7 +232,7 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                                 color='red'
                                 disabled={!data || !data.edit}
                                 onClick={() => setDeleteConfirmationActive(true)}>
-                               Delete
+                                Delete
                             </Button>
                         }
                     </Container>

@@ -140,7 +140,7 @@ const ActionsProvider = (props) => {
             } else {
                 update.snippetsQueryInput = '#' + tag + ' ';
             }
-            
+
             // Modify effective query string
             update.snippetsQuery = update.snippetsQueryInput;
 
@@ -159,13 +159,12 @@ const ActionsProvider = (props) => {
     };
 
     const updateLanguages = () => {
-               appState.api.getLanguages()
+        appState.api.getLanguages()
             .then(response => {
-                let languages = response.data.map(lang =>  ({key: lang.code, value: lang.code, text: lang.name}));
-                updateAppState({languages: languages});
-            }) 
-    }
-    
+                updateAppState({languages: response.data});
+            })
+    };
+
     const defaultState = {
         addTagToSearch: addTagToSearch,
         saveSnippet: saveSnippet,
