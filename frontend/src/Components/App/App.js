@@ -11,11 +11,15 @@ function App() {
     const [appActions,] = useContext(ActionsContext);
 
     useEffect(() => {
+        appActions.updateSnippetsPageSize()
+    }, [appActions]);
+
+    useEffect(() => {
         appActions.checkLoginStatus(10);
     }, [appActions]);
 
     useEffect(() => {
-        if (!appState.activeModal) {
+        if (!appState.activeModal && appState.snippetsPageSize > 0) {
             appActions.updateSnippets({
                 query: appState.snippetsQuery,
                 page: appState.snippetsActivePage,

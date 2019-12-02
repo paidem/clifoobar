@@ -165,7 +165,7 @@ function Header() {
                     <Dropdown
                         inline
                         options={pageSizeOptions}
-                        defaultValue={localStorage.getItem("snippetsPageSize") ||  '10'}
+                        value={appState.snippetsPageSize}
                         onChange={(event, eventData) => {
                             setAppState(s => ({...s, snippetsPageSize: eventData.value}));
                             localStorage.setItem('snippetsPageSize', eventData.value)

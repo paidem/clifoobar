@@ -16,7 +16,7 @@ const AppProvider = (props) => {
         snippetsQuery: null,
         snippetsQueryInput: "",
         snippetsQueryInputRef: useRef(),
-        snippetsPageSize: 10,
+        snippetsPageSize: 0,
         snippetsActivePage: 1,
         snippetsTotal: 0,
         order_by: '-popularity',

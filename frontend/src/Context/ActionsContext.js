@@ -44,6 +44,10 @@ const ActionsProvider = (props) => {
                 updateAppState({snippetsLoading: false});
             })
     };
+    
+    const updateSnippetsPageSize = () => {
+        setAppState(state =>  ({...state, snippetsPageSize: localStorage.getItem("snippetsPageSize") || '10'}));
+    };
 
     const saveSnippet = (props, editMode) => {
         return appState.api.saveSnippet(props, editMode);
@@ -170,6 +174,7 @@ const ActionsProvider = (props) => {
         saveSnippet: saveSnippet,
         checkLoginStatus: checkLoginStatus,
         updateSnippets: updateSnippets,
+        updateSnippetsPageSize:updateSnippetsPageSize,
         updateTags: updateTags,
         updateLanguages: updateLanguages,
         openModal: openModal,
