@@ -74,6 +74,8 @@ function Header() {
     // Flag if login form should be shown instead of search
     const [showLogin, setShowLogin] = useState(false);
 
+    const [logoutConfirmationActive, setLogoutConfirmationActive] = useState(false);
+
     // Timer which controls timeot for display size update
     const updateAppQueryTimer = useRef(0);
 
@@ -171,24 +173,30 @@ function Header() {
                     />
                 </div>
                 <div>
-                    {appState.user ?
-                        <Button size='tiny' animated='fade' color='grey' onClick={() => appActions.logout()}>
-                            <Button.Content visible>
-                                {appState.user.username}
-                            </Button.Content>
-                            <Button.Content hidden>
-                                Logout
-                            </Button.Content>
-                        </Button>
+                    {logoutConfirmationActive ?
+                        <Button.Group size='tiny'>
+                            <Button negative onClick={() => appActions.logout()}>Logout</Button>
+                            <Button.Or/>
+                            <Button onClick={() => setLogoutConfirmationActive(false)}>Stay</Button>
+                        </Button.Group>
                         :
-                        <Button size='tiny'
-                                onClick={() => {
-                                    setShowLogin(!showLogin);
-                                    setAppState(s => ({...s, userLoginFailed: false}));
-                                }}>
-                            {showLogin ? "Cancel" : "Login"}
-                        </Button>
-
+                        appState.user ?
+                            <Button size='tiny' animated='fade' color='grey'
+                                    onClick={() => setLogoutConfirmationActive(true)}>
+                                <Button.Content visible>
+                                    {appState.user.username}
+                                </Button.Content>
+                                <Button.Content hidden>
+                                    Logout
+                                </Button.Content>
+                            </Button> :
+                            <Button size='tiny'
+                                    onClick={() => {
+                                        setShowLogin(!showLogin);
+                                        setAppState(s => ({...s, userLoginFailed: false}));
+                                    }}>
+                                {showLogin ? "Cancel" : "Login"}
+                            </Button>
                     }
                 </div>
             </Segment>
