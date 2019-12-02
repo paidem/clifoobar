@@ -61,7 +61,9 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
 
     const handleInputChange = (event, eventData) => {
         let update = {};
-        update[event.target.name] = event.target.value;
+        // Remove empty lines at start of input, because it confuses hightlighter
+        let newValue = event.target.value.replace(/^(\r\n|\n|\r)/g,"");
+        update[event.target.name] = newValue 
         setSnippetData(s => ({...s, ...update}));
     };
 
