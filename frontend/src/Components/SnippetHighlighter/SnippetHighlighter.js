@@ -5,11 +5,7 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import {agate, darcula, tomorrowNightBlue} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 import './SnippetHighlighter.css'
-import {
-    arrowSignPromptLanguages,
-    dollarSignPromptLanguages,
-    noLineNumbersLanguages
-} from "./SettingsArrays";
+import {arrowSignPromptLanguages, dollarSignPromptLanguages, noLineNumbersLanguages} from "./SettingsArrays";
 
 
 function getShowLineNumbers(value, language) {

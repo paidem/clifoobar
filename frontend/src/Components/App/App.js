@@ -7,7 +7,7 @@ import {ActionsContext} from "../../Context/ActionsContext";
 
 function App() {
     // Context
-    const [appState, ] = useContext(AppContext);
+    const [appState,] = useContext(AppContext);
     const [appActions,] = useContext(ActionsContext);
 
     useEffect(() => {
@@ -43,10 +43,10 @@ function App() {
             <Container style={{paddingBottom: "40px"}}>
             </Container>
             <Label as='a' target="_blank" href="https://github.com/paidem/clifoobar" image attached='bottom left'>
-                        <img src='favicon.ico' alt="logo"/>
-                        CLI Foo Bar
-                        <Label.Detail>{process.env.REACT_APP_VERSION}</Label.Detail>
-                    </Label>
+                <img src='favicon.ico' alt="logo"/>
+                CLI Foo Bar
+                <Label.Detail>{process.env.REACT_APP_VERSION}</Label.Detail>
+            </Label>
         </div>
     );
 }

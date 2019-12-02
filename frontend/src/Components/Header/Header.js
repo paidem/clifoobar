@@ -1,14 +1,7 @@
-import React, {useContext, useEffect, useState, useRef} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {AppContext} from "../../Context/AppContext";
 import {ActionsContext} from "../../Context/ActionsContext";
-import {
-    Button,
-    Dropdown,
-    Icon,
-    Input,
-    Segment,
-    SegmentGroup
-} from "semantic-ui-react";
+import {Button, Dropdown, Icon, Input, Segment, SegmentGroup} from "semantic-ui-react";
 import SnippetModal from "../Modals/SnippetModal";
 import LoginForm from "./LoginForm";
 
@@ -86,7 +79,7 @@ function Header() {
         }
 
         setAppState(state => ({...state, snippetsQueryInput: inputValue}));
-        
+
         updateAppQueryTimer.current = setTimeout(() => {
             setAppState(state => ({...state, snippetsQuery: state.snippetsQueryInput, snippetsActivePage: 1}));
         }, 400)
