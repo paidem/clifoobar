@@ -15,13 +15,8 @@ import {
 function getShowLineNumbers(value, language) {
     if (!language)
         return false;
-    let lang = language.toLowerCase();
 
-    if (noLineNumbersLanguages.includes(lang)) {
-        return false;
-    }
-
-    if (value.split(/\r\n|\r|\n/).length < 3) {
+    if (noLineNumbersLanguages.includes(language.toLowerCase())) {
         return false;
     }
 
@@ -101,6 +96,10 @@ function SnippetHighlighter({
                     let highlighterRect = highlighterEl.getBoundingClientRect();
                     inputRef.current.style.paddingLeft = (codeRect.left - highlighterRect.left) + "px";
                     inputRef.current.style.paddingTop = (codeRect.top - highlighterRect.top) + "px";
+                    console.log(codeRect);
+                    console.log(highlighterRect);
+
+
                 }
             }
         }

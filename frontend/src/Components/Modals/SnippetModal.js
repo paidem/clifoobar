@@ -203,11 +203,11 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                         {/*/>*/}
                         <SnippetHighlighter
                             editable={true}
-                                name="body"
+                            name="body"
                             language={snippetData.language}
                             value={snippetData.body}
                             onChange={handleInputChange}
-                            wrapperStyle={{height: Math.min(300, snippetData.body.split(/\r\n|\r|\n/).length*17)}}
+                            // wrapperStyle={{height: Math.max(165,Math.min(300, snippetData.body.split(/\r\n|\r|\n/).length*17))}}
                         />
 
                     </Form.Field>
