@@ -92,10 +92,6 @@ function SnippetHighlighter({
                     let highlighterRect = highlighterEl.getBoundingClientRect();
                     inputRef.current.style.paddingLeft = (codeRect.left - highlighterRect.left) + "px";
                     inputRef.current.style.paddingTop = (codeRect.top - highlighterRect.top) + "px";
-                    console.log(codeRect);
-                    console.log(highlighterRect);
-
-
                 }
             }
         }

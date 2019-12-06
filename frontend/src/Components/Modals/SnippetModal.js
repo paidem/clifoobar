@@ -151,7 +151,6 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                             <Checkbox toggle
                                       checked={snippetData.personal}
                                       onChange={(event, eventData) => {
-                                          console.log(eventData);
                                           setSnippetData(s => ({...s, personal: eventData.checked}))
                                       }}
                             />
