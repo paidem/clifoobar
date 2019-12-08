@@ -1,21 +1,29 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useRef} from 'react';
 import {Button, Card, Divider, Grid, Label} from "semantic-ui-react";
 import Moment from 'react-moment';
 import 'moment-timezone';
 import {ActionsContext} from "../../Context/ActionsContext";
 import SnippetModal from "../Modals/SnippetModal";
 import {AppContext} from "../../Context/AppContext";
-import SnippetHighlighter from "../SnippetHighlighter/SnippetHighlighter";
+import {Controlled as CodeMirror} from 'react-codemirror2'
+import '../../Utils/CodeMirrorPartsLoader.js'
+import './Snippet.css'
+import {getLanguageMode} from "../../Utils/CodeMirrorHelpers";
+import {getShowLineNumbers} from "../../Utils/CodeMirrorHelpers";
 
 const defaultCopyButtonIcon = 'copy outline';
 const successCopyButtonIcon = 'thumbs up';
+const expandButtonIcon = 'angle double down';
+const collapseButtonIcon = 'angle double up';
 
 function Snippet({snippet}) {
     const [appState,] = useContext(AppContext);
     const [appActions,] = useContext(ActionsContext);
-
+    const [expandedSnippet, setExpandedSnippet] = useState(false);
     const [copyButtonIcon, setCopyButtonIcon] = useState(defaultCopyButtonIcon);
     const [voteEnabled, setVoteEnabled] = useState(true);
+
+    const titleRef = useRef();
 
     const copyToClipboard = str => {
         const el = document.createElement('textarea');
@@ -42,11 +50,14 @@ function Snippet({snippet}) {
         appState.snippetsQueryInputRef.current.focus();
     };
 
+    const longSnippet = snippet && snippet.body.split(/\r\n|\r|\n/).length > 10;
+
     return (
         <React.Fragment>
+
             <Card fluid raised>
                 <Label size='large' attached='top' className={snippet.personal ? 'personal' : ''}>
-                    {snippet.name}
+                    <a id={snippet.id} href={"#"+snippet.id} ref={titleRef}>{snippet.name}</a>
                     <span style={{float: "right"}}>
                         
                         by {snippet.author.full_name}{snippet.personal && ' (personal)'}&nbsp;|&nbsp;
@@ -86,12 +97,13 @@ function Snippet({snippet}) {
                                     size='tiny'
                                     onClick={() => appActions.openModal({
                                         type: SnippetModal,
-                                        data: {edit: true, snippet: snippet}
+                                        data: {edit: true, snippet: snippet},
                                     })}
                                 />}
                             </Grid.Column>
 
                         </Grid>
+
                         <Divider className='snippetDivider'/>
 
                         <div style={{
@@ -99,12 +111,53 @@ function Snippet({snippet}) {
                             justifyContent: "space-between",
                             alignItems: "flex-start"
                         }}>
-                            <div style={{flexGrow: 1, overflow: "auto  hidden"}}>
-                                <SnippetHighlighter
+                            <div style={{flexGrow: 1, overflow: 'hidden', position: 'relative'}}>
+                                <CodeMirror
+                                    className={longSnippet && !expandedSnippet ? 'height-200' : 'autoheight'}
                                     value={snippet.body}
-                                    language={snippet.language}
-                                    customStyle={{maxHeight:"200px", overflowY:"auto"}}
-                                />
+                                    options={{
+                                        mode: getLanguageMode(snippet.language),
+                                        lineNumbers: getShowLineNumbers(snippet.language),
+                                        readOnly: true,
+                                        theme: 'dracula'
+                                    }}/>
+
+                                {(longSnippet && !expandedSnippet) &&
+                                <Button
+                                    size='tiny'
+                                    icon={expandButtonIcon}
+                                    inverted
+                                    className='expansionButtonTop'
+                                    onClick={() => {
+                                        setExpandedSnippet(true)
+                                        window.location.hash = "#";
+                                    }}/>
+                                }
+
+                                {(longSnippet && expandedSnippet) &&
+                                <React.Fragment>
+                                    <Button size='tiny'
+                                            icon={collapseButtonIcon}
+                                            inverted
+                                            className='expansionButtonTop'
+                                            onClick={() => {
+                                                setExpandedSnippet(false);
+                                            }}/>
+                                    <Button size='tiny'
+                                            icon={collapseButtonIcon}
+                                            inverted
+                                            className='expansionButtonBottom'
+                                            onClick={() => {
+                                                setExpandedSnippet(false);
+                                                // Check if the snippet name is off the screen.
+                                                // If it is off screen - navigate to it. Otherway we will see
+                                                // irrelevant data after collapse
+                                                if (titleRef.current.getBoundingClientRect().top < 0) {
+                                                    window.location.hash = "#" + snippet.id;
+                                                }
+                                            }}/>
+                                </React.Fragment>
+                                }
                             </div>
 
                             <Button

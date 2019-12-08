@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
     Button,
     Checkbox,
@@ -12,13 +12,16 @@ import {
     Modal,
     TextArea
 } from "semantic-ui-react";
+import uuid from 'react-uuid'
+import Tags from '@yaireo/tagify/dist/react.tagify'
+
 import {AppContext} from "../../Context/AppContext";
 import {ActionsContext} from "../../Context/ActionsContext";
 import ModalBase from "./ModalBase";
 import {sortArrayOfObjects} from "../../Utils/sortArrayOfObjects";
-import Tags from '@yaireo/tagify/dist/react.tagify'
-
-import SnippetHighlighter from "../SnippetHighlighter/SnippetHighlighter";
+import '../../Utils/CodeMirrorPartsLoader.js'
+import {Controlled as CodeMirror} from 'react-codemirror2'
+import {getLanguageMode, getShowLineNumbers} from "../../Utils/CodeMirrorHelpers";
 
 const snippetDefaultValues = {
     name: "",
@@ -32,12 +35,14 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
     const [appState,] = useContext(AppContext);
     const [appActions,] = useContext(ActionsContext);
     const [error, setError] = useState(null);
-    // const [preview, setPreview] = useState(false);
     const [deleteConfirmationActive, setDeleteConfirmationActive] = useState(false);
 
     // We HAVE to set empty array here, otherway we are reusing tags from previous snippt, as array are by reference
     // DO NOT optimize and DO NOT move "tags: []" to snippetDefaultValues
-    const [snippetData, setSnippetData] = useState({...snippetDefaultValues, tags: []});
+    const [snippetData, setSnippetData] = useState((data && data.edit) ? data.snippet : {
+        ...snippetDefaultValues,
+        tags: []
+    });
 
     const handleApiError = (error) => {
         if (error.response && error.response.data && error.response.data.detail) {
@@ -61,10 +66,12 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
 
     const handleInputChange = (event, eventData) => {
         let update = {};
-        // Remove empty lines at start of input, because it confuses hightlighter
-        let newValue = event.target.value.replace(/^(\r\n|\n|\r)/g,"");
-        update[event.target.name] = newValue 
+        update[event.target.name] = event.target.value;
         setSnippetData(s => ({...s, ...update}));
+    };
+
+    const handleBodyInputChange = (editor, data, value) => {
+        setSnippetData(s => ({...s, body: value}));
     };
 
     const handleDelete = (e) => {
@@ -112,13 +119,6 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
             // invalid: onTagifyInvalid
         }
     };
-
-    // Load data if we are in edit mode
-    useEffect(() => {
-        if (data && data.edit) {
-            setSnippetData(data.snippet);
-        }
-    }, [data]);
 
     return (
         <ModalBase size="large" handleClose={handleClose} className={snippetData.personal ? 'personal' : ''}>
@@ -176,7 +176,7 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                             selection
                             value={snippetData.language}
                             options={sortArrayOfObjects(appState.languages, "text").map(lang => ({
-                                key: lang.code,
+                                key: uuid(),
                                 value: lang.code,
                                 text: lang.name
                             }))}
@@ -193,21 +193,15 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                         }}>Language&nbsp;&nbsp;&nbsp;</label>
                     </Form.Field>
                     <Form.Field>
-                        {/*<EditableHighlightArea*/}
-                        {/*    name="body"*/}
-                        {/*    language={snippetData.language}*/}
-                        {/*    value={snippetData.body}*/}
-                        {/*    onChange={handleInputChange}*/}
-                        {/*    wrapperStyle={{height: Math.min(300, snippetData.body.split(/\r\n|\r|\n/).length*17)}}*/}
-                        {/*/>*/}
-                        <SnippetHighlighter
-                            editable={true}
+                        <CodeMirror
                             name="body"
-                            language={snippetData.language}
                             value={snippetData.body}
-                            onChange={handleInputChange}
-                            // wrapperStyle={{height: Math.max(165,Math.min(300, snippetData.body.split(/\r\n|\r|\n/).length*17))}}
-                        />
+                            onBeforeChange={handleBodyInputChange}
+                            options={{
+                                mode: getLanguageMode(snippetData.language),
+                                lineNumbers: getShowLineNumbers(snippetData.language),
+                                theme: 'dracula'
+                            }}/>
 
                     </Form.Field>
                     <Container fluid style={{display: "flex", justifyContent: "space-between"}}>

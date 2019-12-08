@@ -2,64 +2,29 @@
   {
     "model": "cfb.language",
     "fields": {
-      "code": "accesslog",
-      "name": "access log"
+      "code": "css",
+      "name": "CSS"
     }
   },
   {
     "model": "cfb.language",
     "fields": {
-      "code": "apache",
-      "name": "apache"
+      "code": "c",
+      "name": "C/C++"
     }
   },
   {
     "model": "cfb.language",
     "fields": {
-      "code": "autohotkey",
-      "name": "autohotkey"
-    }
-  },
-  {
-    "model": "cfb.language",
-    "fields": {
-      "code": "bash",
-      "name": "Bash"
-    }
-  },
-  {
-    "model": "cfb.language",
-    "fields": {
-      "code": "cpp",
-      "name": "C++"
-    }
-  },
-  {
-    "model": "cfb.language",
-    "fields": {
-      "code": "cs",
+      "code": "csharp",
       "name": "C#"
     }
   },
   {
     "model": "cfb.language",
     "fields": {
-      "code": "dockerfile",
-      "name": "dockerfile"
-    }
-  },
-  {
-    "model": "cfb.language",
-    "fields": {
-      "code": "dos",
-      "name": "dos"
-    }
-  },
-  {
-    "model": "cfb.language",
-    "fields": {
-      "code": "go",
-      "name": "Go"
+      "code": "objective-c",
+      "name": "Objective-C"
     }
   },
   {
@@ -72,8 +37,57 @@
   {
     "model": "cfb.language",
     "fields": {
+      "code": "kotlin",
+      "name": "Kotlin"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "diff",
+      "name": "diff"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "django",
+      "name": "Django"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "dockerfile",
+      "name": "Dockerfile"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "go",
+      "name": "go"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "htmlmixed",
+      "name": "html"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
+      "code": "http",
+      "name": "http"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
       "code": "javascript",
-      "name": "JavaScript"
+      "name": "javascript"
     }
   },
   {
@@ -86,22 +100,22 @@
   {
     "model": "cfb.language",
     "fields": {
-      "code": "kotlin",
-      "name": "Kotlin"
+      "code": "jinja2",
+      "name": "jinja2"
     }
   },
   {
     "model": "cfb.language",
     "fields": {
-      "code": "less",
-      "name": "Less"
+      "code": "jsx",
+      "name": "JSX"
     }
   },
   {
     "model": "cfb.language",
     "fields": {
       "code": "markdown",
-      "name": "markdown"
+      "name": "Markdown"
     }
   },
   {
@@ -114,36 +128,8 @@
   {
     "model": "cfb.language",
     "fields": {
-      "code": "objectivec",
-      "name": "ObjectiveC"
-    }
-  },
-  {
-    "model": "cfb.language",
-    "fields": {
-      "code": "pgsql",
-      "name": "pgsql"
-    }
-  },
-  {
-    "model": "cfb.language",
-    "fields": {
       "code": "php",
       "name": "PHP"
-    }
-  },
-  {
-    "model": "cfb.language",
-    "fields": {
-      "code": "plaintext",
-      "name": "plaintext"
-    }
-  },
-  {
-    "model": "cfb.language",
-    "fields": {
-      "code": "properties",
-      "name": "properties"
     }
   },
   {
@@ -156,22 +142,15 @@
   {
     "model": "cfb.language",
     "fields": {
+      "code": "properties",
+      "name": "Properties"
+    }
+  },
+  {
+    "model": "cfb.language",
+    "fields": {
       "code": "python",
       "name": "Python"
-    }
-  },
-  {
-    "model": "cfb.language",
-    "fields": {
-      "code": "ruby",
-      "name": "Ruby"
-    }
-  },
-  {
-    "model": "cfb.language",
-    "fields": {
-      "code": "scss",
-      "name": "SCSS"
     }
   },
   {
@@ -191,29 +170,29 @@
   {
     "model": "cfb.language",
     "fields": {
-      "code": "swift",
-      "name": "Swift"
+      "code": "textfile",
+      "name": "Textfile"
     }
   },
   {
     "model": "cfb.language",
     "fields": {
-      "code": "typescript",
-      "name": "Typescript"
+      "code": "toml",
+      "name": "TOML"
     }
   },
   {
     "model": "cfb.language",
     "fields": {
-      "code": "vbnet",
-      "name": "VB.Net"
+      "code": "vb",
+      "name": "VB.NET"
     }
   },
   {
     "model": "cfb.language",
     "fields": {
       "code": "vbscript",
-      "name": "VB script"
+      "name": "VBscript"
     }
   },
   {
