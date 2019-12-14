@@ -29,7 +29,7 @@ const snippetDefaultValues = {
     name: "",
     description: "",
     body: "",
-    language: null,
+    language: 'shell',
     personal: false,
 };
 
