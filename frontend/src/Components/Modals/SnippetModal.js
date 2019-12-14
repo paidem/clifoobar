@@ -5,12 +5,13 @@ import {
     Container,
     Dropdown,
     Form,
+    Grid,
     Header,
     Icon,
     Input,
     Message,
     Modal,
-    TextArea
+    Segment
 } from "semantic-ui-react";
 import uuid from 'react-uuid'
 import Tags from '@yaireo/tagify/dist/react.tagify'
@@ -22,6 +23,7 @@ import {sortArrayOfObjects} from "../../Utils/sortArrayOfObjects";
 import '../../Utils/CodeMirrorPartsLoader.js'
 import {Controlled as CodeMirror} from 'react-codemirror2'
 import {getLanguageMode, getShowLineNumbers} from "../../Utils/CodeMirrorHelpers";
+import ReactMarkdown from "react-markdown";
 
 const snippetDefaultValues = {
     name: "",
@@ -35,6 +37,7 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
     const [appState,] = useContext(AppContext);
     const [appActions,] = useContext(ActionsContext);
     const [error, setError] = useState(null);
+    const [previewDescription, setPreviewDescription] = useState(false);
     const [deleteConfirmationActive, setDeleteConfirmationActive] = useState(false);
 
     // We HAVE to set empty array here, otherway we are reusing tags from previous snippt, as array are by reference
@@ -72,6 +75,10 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
 
     const handleBodyInputChange = (editor, data, value) => {
         setSnippetData(s => ({...s, body: value}));
+    };
+
+    const handleDescriptionInputChange = (editor, data, value) => {
+        setSnippetData(s => ({...s, description: value}));
     };
 
     const handleDelete = (e) => {
@@ -159,14 +166,39 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                         </Form.Field>
                     </Form.Group>
                     <Form.Field>
-                        <label>Description</label>
-                        <TextArea
-                            value={snippetData.description}
-                            onChange={handleInputChange}
-                            name='description'
-                            rows={Math.min(10, Math.max(3, snippetData.description && snippetData.description.split(/\r\n|\r|\n/).length))}
-                            style={{fontFamily: "monospace"}}
-                        />
+                        <strong>Description</strong> (<a target='_blank'
+                                                         href='https://www.markdownguide.org/cheat-sheet/'>markdown</a>)
+                        <span style={{float: 'right'}}>
+                            Preview &nbsp;
+                            <Checkbox toggle
+                                      checked={previewDescription}
+                                      onChange={(event, eventData) => {
+                                          setPreviewDescription(eventData.checked)
+                                      }}
+                            />
+                        </span>
+
+                        <Segment>
+                            <Grid columns={previewDescription ? 2 : 1} divided>
+                                <Grid.Row>
+                                    <Grid.Column>
+                                        <CodeMirror
+                                            name="description"
+                                            value={snippetData.description}
+                                            onBeforeChange={handleDescriptionInputChange}
+                                            options={{
+                                                mode: 'markdown',
+                                                lineNumbers: false,
+                                                theme: 'default'
+                                            }}/>
+                                    </Grid.Column>
+                                    {previewDescription && <Grid.Column>
+                                        <ReactMarkdown source={snippetData.description}/>
+                                    </Grid.Column>}
+                                </Grid.Row>
+                            </Grid>
+                        </Segment>
+
                     </Form.Field>
                     <Form.Field>
                         <label style={{maxWidth: "200px", float: "left", paddingTop: "15px"}}>Snippet</label>

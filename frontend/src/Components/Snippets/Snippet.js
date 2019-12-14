@@ -10,6 +10,7 @@ import '../../Utils/CodeMirrorPartsLoader.js'
 import './Snippet.css'
 import {getLanguageMode} from "../../Utils/CodeMirrorHelpers";
 import {getShowLineNumbers} from "../../Utils/CodeMirrorHelpers";
+import ReactMarkdown from "react-markdown";
 
 const defaultCopyButtonIcon = 'copy outline';
 const successCopyButtonIcon = 'thumbs up';
@@ -75,7 +76,7 @@ function Snippet({snippet}) {
                         <Grid>
                             <Grid.Column mobile={16} tablet={10} computer={14}>
                                 <div className='snippetDescription'>
-                                    <code>{snippet.description}</code>
+                                    <ReactMarkdown source={snippet.description}/>
                                 </div>
                                 {snippet.tags.length > 0 &&
                                 <div className='snippetTags'>
