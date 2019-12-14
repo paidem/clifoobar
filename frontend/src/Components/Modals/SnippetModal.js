@@ -128,7 +128,7 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
     };
 
     return (
-        <ModalBase size="large" handleClose={handleClose} className={snippetData.personal ? 'personal' : ''}>
+        <ModalBase size="fullscreen" handleClose={handleClose} className={snippetData.personal ? 'personal' : ''}>
             <Header icon='file code outline'
                     content={(data && data.edit ? 'Edit ' : 'New ') + (snippetData.personal ? 'personal ' : '') + 'snippet'}
             />
