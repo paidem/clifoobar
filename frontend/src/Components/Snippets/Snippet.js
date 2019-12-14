@@ -105,78 +105,84 @@ function Snippet({snippet}) {
 
                         </Grid>
 
-                        <Divider className='snippetDivider'/>
 
-                        <div style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "flex-start"
-                        }}>
-                            <div style={{flexGrow: 1, overflow: 'hidden', position: 'relative'}}>
-                                <CodeMirror
-                                    className={longSnippet && !expandedSnippet ? 'height-200' : 'autoheight'}
-                                    value={snippet.body}
-                                    options={{
-                                        mode: getLanguageMode(snippet.language),
-                                        lineNumbers: getShowLineNumbers(snippet.language),
-                                        readOnly: true,
-                                        theme: 'dracula'
-                                    }}/>
 
-                                {(longSnippet && !expandedSnippet) &&
+                        {snippet.body.length > 0 &&
+                        <React.Fragment>
+                            <Divider className='snippetDivider'/>
+                            <div style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "flex-start"
+                            }}>
+                                <div style={{flexGrow: 1, overflow: 'hidden', position: 'relative'}}>
+                                    <CodeMirror
+                                        className={longSnippet && !expandedSnippet ? 'height-200' : 'autoheight'}
+                                        value={snippet.body}
+                                        options={{
+                                            mode: getLanguageMode(snippet.language),
+                                            lineNumbers: getShowLineNumbers(snippet.language),
+                                            readOnly: true,
+                                            theme: 'dracula'
+                                        }}/>
+
+                                    {(longSnippet && !expandedSnippet) &&
+                                    <Button
+                                        size='tiny'
+                                        icon={expandButtonIcon}
+                                        inverted
+                                        className='expansionButtonTop'
+                                        onClick={() => {
+                                            setExpandedSnippet(true)
+                                            window.location.hash = "#";
+                                        }}/>
+                                    }
+
+                                    {(longSnippet && expandedSnippet) &&
+                                    <React.Fragment>
+                                        <Button size='tiny'
+                                                icon={collapseButtonIcon}
+                                                inverted
+                                                className='expansionButtonTop'
+                                                onClick={() => {
+                                                    setExpandedSnippet(false);
+                                                }}/>
+                                        <Button size='tiny'
+                                                icon={collapseButtonIcon}
+                                                inverted
+                                                className='expansionButtonBottom'
+                                                onClick={() => {
+                                                    setExpandedSnippet(false);
+                                                    // Check if the snippet name is off the screen.
+                                                    // If it is off screen - navigate to it. Otherway we will see
+                                                    // irrelevant data after collapse
+                                                    if (titleRef.current.getBoundingClientRect().top < 0) {
+                                                        window.location.hash = "#" + snippet.id;
+                                                    }
+                                                }}/>
+                                    </React.Fragment>
+                                    }
+                                </div>
+
                                 <Button
-                                    size='tiny'
-                                    icon={expandButtonIcon}
-                                    inverted
-                                    className='expansionButtonTop'
-                                    onClick={() => {
-                                        setExpandedSnippet(true)
-                                        window.location.hash = "#";
-                                    }}/>
-                                }
+                                    style={{marginLeft: "5px"}}
+                                    color='orange'
+                                    content=''
+                                    compact
+                                    icon={copyButtonIcon}
+                                    label={{
+                                        basic: true,
+                                        color: 'grey',
+                                        pointing: 'left',
+                                        content: snippet.popularity
+                                    }}
+                                    onClick={() => copyToClipboard(snippet.body)}
+                                    size='medium'
+                                />
 
-                                {(longSnippet && expandedSnippet) &&
-                                <React.Fragment>
-                                    <Button size='tiny'
-                                            icon={collapseButtonIcon}
-                                            inverted
-                                            className='expansionButtonTop'
-                                            onClick={() => {
-                                                setExpandedSnippet(false);
-                                            }}/>
-                                    <Button size='tiny'
-                                            icon={collapseButtonIcon}
-                                            inverted
-                                            className='expansionButtonBottom'
-                                            onClick={() => {
-                                                setExpandedSnippet(false);
-                                                // Check if the snippet name is off the screen.
-                                                // If it is off screen - navigate to it. Otherway we will see
-                                                // irrelevant data after collapse
-                                                if (titleRef.current.getBoundingClientRect().top < 0) {
-                                                    window.location.hash = "#" + snippet.id;
-                                                }
-                                            }}/>
-                                </React.Fragment>
-                                }
                             </div>
-
-                            <Button
-                                style={{marginLeft: "5px"}}
-                                color='orange'
-                                content=''
-                                compact
-                                icon={copyButtonIcon}
-                                label={{
-                                    basic: true,
-                                    color: 'grey',
-                                    pointing: 'left',
-                                    content: snippet.popularity
-                                }}
-                                onClick={() => copyToClipboard(snippet.body)}
-                                size='medium'
-                            />
-                        </div>
+                        </React.Fragment>
+                        }
                     </Card.Description>
                 </Card.Content>
             </Card>
