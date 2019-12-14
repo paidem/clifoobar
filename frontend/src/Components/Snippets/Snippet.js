@@ -1,4 +1,4 @@
-import React, {useContext, useState, useRef} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import {Button, Card, Divider, Grid, Label} from "semantic-ui-react";
 import Moment from 'react-moment';
 import 'moment-timezone';
@@ -8,8 +8,7 @@ import {AppContext} from "../../Context/AppContext";
 import {Controlled as CodeMirror} from 'react-codemirror2'
 import '../../Utils/CodeMirrorPartsLoader.js'
 import './Snippet.css'
-import {getLanguageMode} from "../../Utils/CodeMirrorHelpers";
-import {getShowLineNumbers} from "../../Utils/CodeMirrorHelpers";
+import {getLanguageMode, getShowLineNumbers} from "../../Utils/CodeMirrorHelpers";
 import ReactMarkdown from "react-markdown";
 
 const defaultCopyButtonIcon = 'copy outline';
@@ -58,7 +57,7 @@ function Snippet({snippet}) {
 
             <Card fluid raised>
                 <Label size='large' attached='top' className={snippet.personal ? 'personal' : ''}>
-                    <a id={snippet.id} href={"#"+snippet.id} ref={titleRef}>{snippet.name}</a>
+                    <a id={snippet.id} href={"#" + snippet.id} ref={titleRef}>{snippet.name}</a>
                     <span style={{float: "right"}}>
                         
                         by {snippet.author.full_name}{snippet.personal && ' (personal)'}&nbsp;|&nbsp;
