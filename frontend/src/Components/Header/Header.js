@@ -4,60 +4,7 @@ import {ActionsContext} from "../../Context/ActionsContext";
 import {Button, Dropdown, Icon, Input, Segment, SegmentGroup} from "semantic-ui-react";
 import SnippetModal from "../Modals/SnippetModal";
 import LoginForm from "./LoginForm";
-
-
-const orderOptions = [
-    {
-        key: 'popularity-desc',
-        text: 'By popularity',
-        value: '-popularity',
-    },
-    {
-        key: 'created-desc',
-        text: 'Newest',
-        value: '-created',
-    },
-    {
-        key: 'created-asc',
-        text: 'Oldest',
-        value: 'created',
-    },
-    {
-        key: 'personal',
-        text: 'My personal',
-        value: '-personal',
-    },
-];
-
-const pageSizeOptions = [
-    {
-        key: '5',
-        text: '5',
-        value: '5',
-    },
-    {
-        key: '10',
-        text: '10',
-        value: '10',
-    },
-    {
-        key: '20',
-        text: '20',
-        value: '20',
-    },
-    {
-        key: '50',
-        text: '50',
-        value: '50',
-    },
-    {
-        key: '100',
-        text: '100',
-        value: '100',
-    },
-
-];
-
+import {orderOptions, pageSizeOptions} from "../../Context/Enums";
 
 function Header() {
     // Context
@@ -147,10 +94,10 @@ function Header() {
                     <Dropdown
                         inline
                         options={orderOptions}
-                        defaultValue={localStorage.getItem("order_by") || orderOptions[0].value}
+                        value={appState.snippetsOrder}
                         onChange={(event, eventData) => {
-                            setAppState(s => ({...s, order_by: eventData.value}));
-                            localStorage.setItem('order_by', eventData.value)
+                            setAppState(s => ({...s, snippetsOrder: eventData.value}));
+                            localStorage.setItem('snippetsOrder', eventData.value)
                         }}
                     />
                     &nbsp;

@@ -1,5 +1,6 @@
 import React, {useRef, useState} from 'react';
 import cfbapi from "../Api/cfbapi";
+import {orderOptions} from "./Enums";
 
 const api = new cfbapi();
 
@@ -16,6 +17,7 @@ const AppProvider = (props) => {
         snippetsQuery: null,
         snippetsQueryInput: "",
         snippetsQueryInputRef: useRef(),
+        snippetsOrder: orderOptions[0].value,
         snippetsPageSize: 0,
         snippetsActivePage: 1,
         snippetsTotal: 0,

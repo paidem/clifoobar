@@ -1,5 +1,6 @@
 import React, {useContext, useState} from 'react';
 import {AppContext} from "./AppContext";
+import {orderOptions} from "./Enums";
 
 const ActionsContext = React.createContext([{}, () => {
 }]);
@@ -45,8 +46,12 @@ const ActionsProvider = (props) => {
             })
     };
 
-    const updateSnippetsPageSize = () => {
-        setAppState(state => ({...state, snippetsPageSize: localStorage.getItem("snippetsPageSize") || '10'}));
+    const updateSettingsFromLocalStorage = () => {
+        setAppState(state => ({
+            ...state,
+            snippetsPageSize: localStorage.getItem("snippetsPageSize") || '10',
+            snippetsOrder: localStorage.getItem("snippetsOrder") || orderOptions[0].value
+        }));
     };
 
     const saveSnippet = (props, editMode) => {
@@ -174,7 +179,7 @@ const ActionsProvider = (props) => {
         saveSnippet: saveSnippet,
         checkLoginStatus: checkLoginStatus,
         updateSnippets: updateSnippets,
-        updateSnippetsPageSize: updateSnippetsPageSize,
+        updateSettingsFromLocalStorage: updateSettingsFromLocalStorage,
         updateTags: updateTags,
         updateLanguages: updateLanguages,
         openModal: openModal,

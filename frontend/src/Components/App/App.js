@@ -11,7 +11,7 @@ function App() {
     const [appActions,] = useContext(ActionsContext);
 
     useEffect(() => {
-        appActions.updateSnippetsPageSize()
+        appActions.updateSettingsFromLocalStorage()
     }, [appActions]);
 
     useEffect(() => {
@@ -24,12 +24,12 @@ function App() {
                 query: appState.snippetsQuery,
                 page: appState.snippetsActivePage,
                 page_size: appState.snippetsPageSize,
-                order_by: appState.order_by,
+                order_by: appState.snippetsOrder,
             });
             appActions.updateTags();
             appActions.updateLanguages();
         }
-    }, [appActions, appState.activeModal, appState.order_by, appState.snippetsActivePage, appState.snippetsPageSize, appState.snippetsQuery]);
+    }, [appActions, appState.activeModal, appState.order_by, appState.snippetsActivePage, appState.snippetsOrder, appState.snippetsPageSize, appState.snippetsQuery]);
 
     return (
         <div className="App">
