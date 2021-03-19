@@ -1,8 +1,8 @@
 Django==2.2.8
 django-environ==0.4.5
 django-taggit-serializer==0.1.7
-djangorestframework==3.10.3
-djangorestframework==3.10.3
+djangorestframework==3.11.2
+djangorestframework==3.11.2
 gunicorn==20.0.4
 pytz==2019.3
 python-memcached==1.59
