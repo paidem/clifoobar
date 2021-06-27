@@ -1,3 +1,5 @@
+import uuid
+
 from django.db.models import Q, F
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
@@ -73,14 +75,24 @@ class SnippetViewSet(viewsets.ModelViewSet):
         q = self.request.query_params.get('q', None)
 
         tags = set()
+        uuidMatched = False
 
         if q is not None:
             terms = q.split(' ')
-            for term in terms:
-                if term and term[0] == '#':
-                    tags.add(term[1:])
-                else:
-                    queryset = self.add_contains_filter(queryset, term)
+            if len(terms) == 1:
+                try:
+                    uuid_obj = uuid.UUID(terms[0])
+                    uuidMatched = True
+                    queryset = self.add_id_filter(queryset, uuid_obj)
+                except ValueError:
+                    pass
+
+            if not uuidMatched:
+                for term in terms:
+                    if term and term[0] == '#':
+                        tags.add(term[1:])
+                    else:
+                        queryset = self.add_contains_filter(queryset, term)
 
         if len(tags) > 0:
             queryset = queryset.filter(tags__name__in=tags).distinct()
@@ -106,6 +118,10 @@ class SnippetViewSet(viewsets.ModelViewSet):
     @classmethod
     def add_contains_filter(cls, queryset, term):
         return queryset.filter(Q(name__contains=term) | Q(description__contains=term) | Q(body__contains=term))
+
+    @classmethod
+    def add_id_filter(cls, queryset, id):
+        return queryset.filter(id=id)
 
 
 @api_view(['POST'])
