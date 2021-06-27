@@ -1,5 +1,5 @@
 import React, {useContext, useRef, useState} from 'react';
-import {Button, Card, Divider, Grid, Label} from "semantic-ui-react";
+import {Button, Card, Divider, Grid, Input, Label} from "semantic-ui-react";
 import Moment from 'react-moment';
 import 'moment-timezone';
 import {ActionsContext} from "../../Context/ActionsContext";
@@ -23,6 +23,8 @@ function Snippet({snippet}) {
     const [copyButtonIcon, setCopyButtonIcon] = useState(defaultCopyButtonIcon);
     const [voteEnabled, setVoteEnabled] = useState(true);
 
+    const [copyUrlButtonText, setCopyUrlButtonText] = useState("Copy link")
+
     const titleRef = useRef();
 
     const copyToClipboard = str => {
@@ -44,6 +46,18 @@ function Snippet({snippet}) {
         }
 
     };
+
+    const copyUrlToClipboard = str => {
+        const el = document.createElement('textarea');
+        el.value = str;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+
+        setCopyUrlButtonText("Copied!")
+        setTimeout(() => {setCopyUrlButtonText("Copy link")},2000)
+    }
 
     const addTagToSearch = (tag) => {
         appActions.addTagToSearch(tag);
@@ -73,7 +87,7 @@ function Snippet({snippet}) {
                 <Card.Content>
                     <Card.Description>
                         <Grid>
-                            <Grid.Column mobile={16} tablet={10} computer={14}>
+                            <Grid.Column mobile={16} tablet={10} computer={10}>
                                 <div className='snippetDescription'>
                                     <ReactMarkdown source={snippet.description}/>
                                 </div>
@@ -88,7 +102,7 @@ function Snippet({snippet}) {
                                     </Label.Group>
                                 </div>}
                             </Grid.Column>
-                            <Grid.Column mobile={16} tablet={6} computer={2} textAlign='right'>
+                            <Grid.Column mobile={16} tablet={6} computer={6} textAlign='right'>
                                 {(appState.user && (appState.user.is_superuser || (snippet.author && snippet.author.id === appState.user.id))) &&
                                 <Button
                                     color='grey'
@@ -100,6 +114,14 @@ function Snippet({snippet}) {
                                         data: {edit: true, snippet: snippet},
                                     })}
                                 />}
+                                <Button
+                                    style={{marginTop: "5px"}}
+                                    color='blue'
+                                    content={copyUrlButtonText}
+                                    icon={copyButtonIcon}
+                                    onClick={() => copyUrlToClipboard(window.location.origin + "/#" + snippet.id)}
+                                    size='tiny'
+                                />
                             </Grid.Column>
 
                         </Grid>

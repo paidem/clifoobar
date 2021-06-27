@@ -12,6 +12,7 @@ const AppProvider = (props) => {
 
     const defaultState = {
         api: api,
+        searchApplied: false,
         snippets: [],
         snippetsLoading: false,
         snippetsQuery: null,

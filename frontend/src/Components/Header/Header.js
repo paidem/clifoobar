@@ -1,12 +1,13 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {AppContext} from "../../Context/AppContext";
 import {ActionsContext} from "../../Context/ActionsContext";
-import {Button, Dropdown, Icon, Input, Segment, SegmentGroup} from "semantic-ui-react";
+import {Button, Dropdown, Icon, Input, Label, Segment, SegmentGroup} from "semantic-ui-react";
 import SnippetModal from "../Modals/SnippetModal";
 import LoginForm from "./LoginForm";
 import {orderOptions, pageSizeOptions} from "../../Context/Enums";
+import { withRouter } from 'react-router-dom';
 
-function Header() {
+function Header(props) {
     // Context
     const [appState, setAppState] = useContext(AppContext);
     const [appActions,] = useContext(ActionsContext);
@@ -41,7 +42,17 @@ function Header() {
         if (appState.user) {
             setShowLogin(false)
         }
-    }, [appActions, appState.user]);
+
+        if (!appState.searchApplied && appState.snippetsQueryInput === "") {
+            setAppState(state => ({...state, searchApplied: true}))
+            if (props.match.params.search){
+                onInputChanged(props.match.params.search);
+            }
+            else if (props.location.hash) {
+                onInputChanged(props.location.hash.replace("#", ""));
+            }
+        }
+    }, [appActions, appState.user, appState.searchApplied, appState.snippetsQueryInput, props, onInputChanged, setAppState]);
 
     // // Syncronize search input back from AppState
     // useEffect(() => {
@@ -145,4 +156,4 @@ function Header() {
     )
 }
 
-export default Header;
+export default withRouter(Header);

@@ -4,6 +4,7 @@ import SnippetsList from "../Snippets/SnippetsList";
 import Header from "../Header/Header";
 import {Container, Label} from "semantic-ui-react";
 import {ActionsContext} from "../../Context/ActionsContext";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 function App() {
     // Context
@@ -33,11 +34,15 @@ function App() {
 
     return (
         <div className="App">
+            <Router>
             {appState.activeModal}
             <Container style={{paddingBottom: '10px'}}>
-                <Header/>
+                {/*<Header/>*/}
+                <Route path="/" exact component={() => {return <Header />}} />
+                <Route path="/:search"  component={() => {return <Header />}} />
             </Container>
             <Container>
+                {/*<Route path="/" exact component={() => {return <SnippetsList items={appState.snippets}/>}} />*/}
                 <SnippetsList items={appState.snippets}/>
             </Container>
             <Container style={{paddingBottom: "40px"}}>
@@ -47,6 +52,7 @@ function App() {
                 CLI Foo Bar
                 <Label.Detail>{process.env.REACT_APP_VERSION}</Label.Detail>
             </Label>
+            </Router>
         </div>
     );
 }
