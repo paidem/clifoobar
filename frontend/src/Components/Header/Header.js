@@ -12,9 +12,6 @@ function Header(props) {
     const [appState, setAppState] = useContext(AppContext);
     const [appActions,] = useContext(ActionsContext);
 
-    // Flag if login form should be shown instead of search
-    const [showLogin, setShowLogin] = useState(false);
-
     const [logoutConfirmationActive, setLogoutConfirmationActive] = useState(false);
 
     // Timer which controls timeot for display size update
@@ -39,10 +36,6 @@ function Header(props) {
     };
 
     useEffect(() => {
-        if (appState.user) {
-            setShowLogin(false)
-        }
-
         if (!appState.searchApplied && appState.snippetsQueryInput === "") {
             setAppState(state => ({...state, searchApplied: true}))
             if (props.match.params.search){
@@ -77,11 +70,10 @@ function Header(props) {
                     >
                         New
                     </Button>
-                    {/*}*/}
                 </div>
                 <div style={{flexGrow: 1}}>
-                    {(!appState.user && showLogin) ?
-                        <LoginForm handleLoginSuccess={() => setShowLogin(false)}/> :
+                    {(!appState.user && appState.showLogin) ?
+                        <LoginForm handleLoginSuccess={() => setAppState(s => ({...s, userLoginFailed: false, showLogin: false}))}/> :
                         <Input fluid size='small' icon placeholder='Search...'
                                autoFocus={true}
                                ref={appState.snippetsQueryInputRef}
@@ -143,10 +135,9 @@ function Header(props) {
                             </Button> :
                             <Button size='tiny'
                                     onClick={() => {
-                                        setShowLogin(!showLogin);
-                                        setAppState(s => ({...s, userLoginFailed: false}));
+                                        setAppState(s => ({...s, userLoginFailed: false, showLogin: !appState.showLogin}));
                                     }}>
-                                {showLogin ? "Cancel" : "Login"}
+                                {appState.showLogin ? "Cancel" : "Login"}
                             </Button>
                     }
                 </div>

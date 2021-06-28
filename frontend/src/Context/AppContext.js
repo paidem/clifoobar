@@ -26,6 +26,7 @@ const AppProvider = (props) => {
         tags: [],
         user: null,
         userLoginFailed: false,
+        showLogin: false,
 
     };
 
