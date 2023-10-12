@@ -143,7 +143,8 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                                   className='tagsInput'
                                   name='tags'
                                   settings={tagifySettings}
-                                  initialValue={data && data.snippet && data.snippet.tags && data.snippet.tags.join(', ')}/>
+                                  defaultValue={data && data.snippet && data.snippet.tags && data.snippet.tags.join(', ')}
+                            />
                         </Form.Field>
                         <Form.Field>
                             <label>Personal snippet</label>
