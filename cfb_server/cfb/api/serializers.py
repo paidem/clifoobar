@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from taggit.models import Tag
-from taggit_serializer.serializers import TaggitSerializer, TagListSerializerField
+from taggit.serializers import (TagListSerializerField,
+                                TaggitSerializer)
 
 from cfb.models import Snippet, Language
 from users.models import User

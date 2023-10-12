@@ -43,7 +43,6 @@ INSTALLED_APPS += [
 
     # Tags
     'taggit',
-    'taggit_serializer',
 ]
 
 # Custom apps
