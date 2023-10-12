@@ -14,7 +14,7 @@ function SnippetsList({items}) {
 
     return (
         <div>
-            {items.map(item => <Snippet key={item.id} snippet={item}/>)}
+            {items && items.map(item => <Snippet key={item.id} snippet={item}/>)}
             {(appState.snippetsTotal > appState.snippetsPageSize) &&
             <Pagination firstItem={null}
                         lastItem={{
