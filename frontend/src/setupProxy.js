@@ -1,16 +1,18 @@
-const proxy = require('http-proxy-middleware');
+const {createProxyMiddleware} = require('http-proxy-middleware');
 
-let proxy_location = '';
+let djangoProxyLocation = '127.0.0.1:8000';
 
-if (process.env.DJANGO_PROXY_HOST && process.env.DJANGO_PROXY_PORT){
-  proxy_location=process.env.DJANGO_PROXY_HOST + ":" + process.env.DJANGO_PROXY_PORT;
-}
-else{
-  proxy_location='localhost:8000';
+if (process.env.DJANGO_PROXY_HOST && process.env.DJANGO_PROXY_PORT) {
+    djangoProxyLocation = process.env.DJANGO_PROXY_HOST + ":" + process.env.DJANGO_PROXY_PORT;
 }
 
-module.exports = function(app) {
-  app.use(proxy('/api', { target: 'http://' + proxy_location } ));
-  app.use(proxy('/admin', { target: 'http://' +  proxy_location }));
-  app.use(proxy('/staticfiles', { target: 'http://'  + proxy_location}));
+const djangoProxy = {
+    target: 'http://' + djangoProxyLocation,
+    changeOrigin: true
+}
+
+module.exports = function (app) {
+    app.use('/api', createProxyMiddleware(djangoProxy));
+    app.use('/admin', createProxyMiddleware(djangoProxy));
+    app.use('/staticfiles', createProxyMiddleware(djangoProxy));
 };

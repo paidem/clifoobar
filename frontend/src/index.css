@@ -52,6 +52,10 @@ pre {
   margin: 0 0 0.4rem 0;
 }
 
+.tagsInput {
+  width:100%;
+}
+
 /*.CodeMirror {*/
 /*  height: auto!important;*/
 /*}*/

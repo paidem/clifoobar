@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import { React, useContext, useState} from "react";
 import {
     Button,
     Checkbox,
@@ -14,7 +14,8 @@ import {
     Segment
 } from "semantic-ui-react";
 import uuid from 'react-uuid'
-import Tags from '@yaireo/tagify/dist/react.tagify'
+import Tags from "@yaireo/tagify/dist/react.tagify"
+import "@yaireo/tagify/dist/tagify.css"
 
 import {AppContext} from "../../Context/AppContext";
 import {ActionsContext} from "../../Context/ActionsContext";
@@ -109,14 +110,6 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
         })
     };
 
-    // const onTagifyInput = e => {
-    //     console.log('input:', e.detail);
-    // }
-
-    // const onTagifyInvalid = e => {
-    //     console.log('invalid:', e.detail);
-    // };
-
     const tagifySettings = {
         whitelist: appState.tags,
         callbacks: {
@@ -146,8 +139,7 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                     <Form.Group widths='equal'>
                         <Form.Field>
                             <label>Tags</label>
-                            <Tags mode='textarea'
-                                // autofocus={true}
+                            <Tags
                                   className='tagsInput'
                                   name='tags'
                                   settings={tagifySettings}

@@ -11,5 +11,8 @@ ReactDOM.render(
         <ActionsProvider>
             <App/>
         </ActionsProvider>
-    </AppProvider>
-    , document.getElementById('root'));
+    </AppProvider>,
+    document.getElementById('root')
+);
+
+
