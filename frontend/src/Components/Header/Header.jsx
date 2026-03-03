@@ -1,16 +1,18 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useRef, useState} from 'react';
 import {AppContext} from "../../Context/AppContext";
 import {ActionsContext} from "../../Context/ActionsContext";
 import {Button, Dropdown, Icon, Input, Label, Segment, SegmentGroup} from "semantic-ui-react";
 import SnippetModal from "../Modals/SnippetModal";
 import LoginForm from "./LoginForm";
 import {orderOptions, pageSizeOptions} from "../../Context/Enums";
-import { withRouter } from 'react-router-dom';
+import { useLocation, useParams } from "react-router-dom";
 
-function Header(props) {
+function Header() {
     // Context
     const [appState, setAppState] = useContext(AppContext);
     const [appActions,] = useContext(ActionsContext);
+    const params = useParams();
+    const location = useLocation();
 
     const [logoutConfirmationActive, setLogoutConfirmationActive] = useState(false);
 
@@ -18,7 +20,7 @@ function Header(props) {
     const updateAppQueryTimer = useRef(0);
 
     // Search input callbak
-    const onInputChanged = (inputValue) => {
+    const onInputChanged = useCallback((inputValue) => {
         if (updateAppQueryTimer.current) {
             clearTimeout(updateAppQueryTimer.current);
         }
@@ -28,8 +30,7 @@ function Header(props) {
         updateAppQueryTimer.current = setTimeout(() => {
             setAppState(state => ({...state, snippetsQuery: state.snippetsQueryInput, snippetsActivePage: 1}));
         }, 400)
-
-    };
+    }, [setAppState]);
 
     const clearSearch = () => {
         setAppState(state => ({...state, snippetsQuery: "", snippetsQueryInput: "", snippetsActivePage: 1}));
@@ -38,14 +39,14 @@ function Header(props) {
     useEffect(() => {
         if (!appState.searchApplied && appState.snippetsQueryInput === "") {
             setAppState(state => ({...state, searchApplied: true}))
-            if (props.match.params.search){
-                onInputChanged(props.match.params.search);
+            if (params.search){
+                onInputChanged(params.search);
             }
-            else if (props.location.hash) {
-                onInputChanged(props.location.hash.replace("#", ""));
+            else if (location.hash) {
+                onInputChanged(location.hash.replace("#", ""));
             }
         }
-    }, [appActions, appState.user, appState.searchApplied, appState.snippetsQueryInput, props, onInputChanged, setAppState]);
+    }, [appState.searchApplied, appState.snippetsQueryInput, location.hash, onInputChanged, params.search, setAppState]);
 
     // // Syncronize search input back from AppState
     // useEffect(() => {
@@ -147,4 +148,4 @@ function Header(props) {
     )
 }
 
-export default withRouter(Header);
+export default Header;

@@ -13,17 +13,15 @@ import {
     Modal,
     Segment
 } from "semantic-ui-react";
-import uuid from 'react-uuid'
 import Tags from "@yaireo/tagify/dist/react.tagify"
 import "@yaireo/tagify/dist/tagify.css"
+import CodeMirror from "@uiw/react-codemirror";
 
 import {AppContext} from "../../Context/AppContext";
 import {ActionsContext} from "../../Context/ActionsContext";
 import ModalBase from "./ModalBase";
 import {sortArrayOfObjects} from "../../Utils/sortArrayOfObjects";
-import '../../Utils/CodeMirrorPartsLoader.js'
-import {Controlled as CodeMirror} from 'react-codemirror2'
-import {getLanguageMode, getShowLineNumbers} from "../../Utils/CodeMirrorHelpers";
+import {getCodeMirrorExtensions, getCodeMirrorTheme, getShowLineNumbers} from "../../Utils/CodeMirrorHelpers";
 import ReactMarkdown from "react-markdown";
 
 const snippetDefaultValues = {
@@ -74,11 +72,11 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
         setSnippetData(s => ({...s, ...update}));
     };
 
-    const handleBodyInputChange = (editor, data, value) => {
+    const handleBodyInputChange = (value) => {
         setSnippetData(s => ({...s, body: value}));
     };
 
-    const handleDescriptionInputChange = (editor, data, value) => {
+    const handleDescriptionInputChange = (value) => {
         setSnippetData(s => ({...s, description: value}));
     };
 
@@ -176,14 +174,14 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                                 <Grid.Row>
                                     <Grid.Column>
                                         <CodeMirror
+                                            className="descriptionEditor"
                                             name="description"
                                             value={snippetData.description}
-                                            onBeforeChange={handleDescriptionInputChange}
-                                            options={{
-                                                mode: 'markdown',
-                                                lineNumbers: false,
-                                                theme: 'default'
-                                            }}/>
+                                            onChange={handleDescriptionInputChange}
+                                            basicSetup={{lineNumbers: false}}
+                                            extensions={getCodeMirrorExtensions("markdown")}
+                                            theme={getCodeMirrorTheme("default")}
+                                        />
                                     </Grid.Column>
                                     {previewDescription && <Grid.Column>
                                         <ReactMarkdown>{snippetData.description || ''}</ReactMarkdown>
@@ -201,7 +199,7 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                             selection
                             value={snippetData.language}
                             options={sortArrayOfObjects(appState.languages, "text").map(lang => ({
-                                key: uuid(),
+                                key: lang.code,
                                 value: lang.code,
                                 text: lang.name
                             }))}
@@ -219,14 +217,14 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                     </Form.Field>
                     <Form.Field>
                         <CodeMirror
+                            className="snippetEditor"
                             name="body"
                             value={snippetData.body}
-                            onBeforeChange={handleBodyInputChange}
-                            options={{
-                                mode: getLanguageMode(snippetData.language),
-                                lineNumbers: getShowLineNumbers(snippetData.language),
-                                theme: 'dracula'
-                            }}/>
+                            onChange={handleBodyInputChange}
+                            basicSetup={{lineNumbers: getShowLineNumbers(snippetData.language)}}
+                            extensions={getCodeMirrorExtensions(snippetData.language)}
+                            theme={getCodeMirrorTheme("dracula")}
+                        />
 
                     </Form.Field>
                     <Container fluid style={{display: "flex", justifyContent: "space-between"}}>

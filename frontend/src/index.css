@@ -56,7 +56,14 @@ pre {
   width:100%;
 }
 
+.descriptionEditor .cm-scroller {
+  min-height: 120px;
+}
+
+.snippetEditor .cm-scroller {
+  min-height: 280px;
+}
+
 /*.CodeMirror {*/
 /*  height: auto!important;*/
 /*}*/
-

@@ -4,7 +4,7 @@ import SnippetsList from "../Snippets/SnippetsList";
 import Header from "../Header/Header";
 import {Container, Label} from "semantic-ui-react";
 import {ActionsContext} from "../../Context/ActionsContext";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
     // Context
@@ -37,9 +37,10 @@ function App() {
             <Router>
             {appState.activeModal}
             <Container style={{paddingBottom: '10px'}}>
-                {/*<Header/>*/}
-                <Route path="/" exact component={() => {return <Header />}} />
-                <Route path="/:search"  component={() => {return <Header />}} />
+                <Routes>
+                    <Route path="/" element={<Header />} />
+                    <Route path="/:search" element={<Header />} />
+                </Routes>
             </Container>
             <Container>
                 {/*<Route path="/" exact component={() => {return <SnippetsList items={appState.snippets}/>}} />*/}
@@ -50,7 +51,9 @@ function App() {
             <Label as='a' target="_blank" href="https://github.com/paidem/clifoobar" image attached='bottom left'>
                 <img src='favicon.ico' alt="logo"/>
                 CLI Foo Bar
-                <Label.Detail>{process.env.REACT_APP_VERSION}</Label.Detail>
+                <Label.Detail>
+                    {import.meta.env.VITE_APP_VERSION || import.meta.env.REACT_APP_VERSION}
+                </Label.Detail>
             </Label>
             </Router>
         </div>

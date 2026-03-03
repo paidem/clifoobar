@@ -1,15 +1,16 @@
 import React, {useContext, useRef, useState} from 'react';
-import {Button, Card, Divider, Grid, Input, Label} from "semantic-ui-react";
-import Moment from 'react-moment';
-import 'moment-timezone';
+import {Button, Card, Divider, Grid, Label} from "semantic-ui-react";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import {ActionsContext} from "../../Context/ActionsContext";
 import SnippetModal from "../Modals/SnippetModal";
 import {AppContext} from "../../Context/AppContext";
-import {Controlled as CodeMirror} from 'react-codemirror2'
-import '../../Utils/CodeMirrorPartsLoader.js'
+import CodeMirror from "@uiw/react-codemirror";
 import './Snippet.css'
-import {getLanguageMode, getShowLineNumbers} from "../../Utils/CodeMirrorHelpers";
+import {getCodeMirrorExtensions, getCodeMirrorTheme, getShowLineNumbers} from "../../Utils/CodeMirrorHelpers";
 import ReactMarkdown from "react-markdown";
+
+dayjs.extend(relativeTime);
 
 const defaultCopyButtonIcon = 'copy outline';
 const successCopyButtonIcon = 'thumbs up';
@@ -56,7 +57,9 @@ function Snippet({snippet}) {
         document.body.removeChild(el);
 
         setCopyUrlButtonText("Copied!")
-        setTimeout(() => {setCopyUrlButtonText("Copy link")},2000)
+        setTimeout(() => {
+            setCopyUrlButtonText("Copy link")
+        }, 2000)
     }
 
     const addTagToSearch = (tag) => {
@@ -73,14 +76,11 @@ function Snippet({snippet}) {
                 <Label size='large' attached='top' className={snippet.personal ? 'personal' : ''}>
                     <a id={snippet.id} href={"#" + snippet.id} ref={titleRef}>{snippet.name}</a>
                     <span style={{float: "right"}}>
-                        
                         by {snippet.author.full_name}{snippet.personal && ' (personal)'}&nbsp;|&nbsp;
-                        <Moment fromNow
-                                withTitle
-                                titleFormat="YYYY-MM-DD HH:mm"
-                        >
-                            {snippet.created}
-                        </Moment><strong>&nbsp;|&nbsp;{snippet.language}</strong>
+                        <span title={dayjs(snippet.created).format("YYYY-MM-DD HH:mm")}>
+                            {dayjs(snippet.created).fromNow()}
+                        </span>
+                        <strong>&nbsp;|&nbsp;{snippet.language}</strong>
                     </span>
                 </Label>
 
@@ -140,12 +140,11 @@ function Snippet({snippet}) {
                                     <CodeMirror
                                         className={longSnippet && !expandedSnippet ? 'height-200' : 'autoheight'}
                                         value={snippet.body}
-                                        options={{
-                                            mode: getLanguageMode(snippet.language),
-                                            lineNumbers: getShowLineNumbers(snippet.language),
-                                            readOnly: true,
-                                            theme: 'dracula'
-                                        }}/>
+                                        editable={false}
+                                        basicSetup={{lineNumbers: getShowLineNumbers(snippet.language)}}
+                                        extensions={getCodeMirrorExtensions(snippet.language)}
+                                        theme={getCodeMirrorTheme("dracula")}
+                                    />
 
                                     {(longSnippet && !expandedSnippet) &&
                                     <Button
@@ -156,8 +155,7 @@ function Snippet({snippet}) {
                                         onClick={() => {
                                             setExpandedSnippet(true)
                                             window.location.hash = "#";
-                                        }}/>
-                                    }
+                                        }}/>}
 
                                     {(longSnippet && expandedSnippet) &&
                                     <React.Fragment>

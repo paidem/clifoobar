@@ -1,4 +1,4 @@
-ARG BUILDFRONTENDFROM=node:16.20.2-buster
+ARG BUILDFRONTENDFROM=node:22.14.0-bookworm
 ARG SERVERFROM=python:3.11.5-alpine
 
 ####################
