@@ -1,4 +1,4 @@
-from django.core.management import BaseCommand
+from django.core.management import BaseCommand, call_command
 
 from cfb import models
 
@@ -48,4 +48,5 @@ class Command(BaseCommand):
     help = "Create default languages"
 
     def handle(self, *args, **options):
-        pass
+        call_command('loaddata', 'fixtures/languages.json')
+        self.stdout.write(self.style.SUCCESS("Loaded language fixtures"))
