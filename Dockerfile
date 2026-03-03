@@ -69,8 +69,8 @@ RUN pip install --upgrade pip && \
 # Inject django app
 COPY cfb_server  /app
 
-# Inject built frontend
-COPY --from=builder-frontend /frontend/build /frontend
+# Inject built frontend (Vite outputs to /frontend/dist)
+COPY --from=builder-frontend /frontend/dist /frontend
 
 # Inject docker specific configuration
 COPY docker /tmp/docker
