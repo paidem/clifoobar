@@ -5,7 +5,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import NotFound
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.response import Response
 from taggit.models import Tag
 
@@ -26,7 +26,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 # noinspection PyUnusedLocal
-class SnippetAccessPermission(BaseException):
+class SnippetAccessPermission(BasePermission):
     @staticmethod
     def has_permission(request, view):
         # Allow read to any users
