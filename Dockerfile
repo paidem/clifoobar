@@ -1,5 +1,5 @@
 ARG BUILDFRONTENDFROM=node:22.14.0-bookworm
-ARG SERVERFROM=python:3.11.5-alpine
+ARG SERVERFROM=python:3.12-alpine
 
 ####################
 # BUILDER FRONTEND #
