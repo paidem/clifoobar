@@ -89,7 +89,7 @@ function Snippet({snippet}) {
                         <Grid>
                             <Grid.Column mobile={16} tablet={10} computer={10}>
                                 <div className='snippetDescription'>
-                                    <ReactMarkdown source={snippet.description}/>
+                                    <ReactMarkdown>{snippet.description || ''}</ReactMarkdown>
                                 </div>
                                 {snippet.tags.length > 0 &&
                                 <div className='snippetTags'>

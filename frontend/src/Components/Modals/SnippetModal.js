@@ -186,7 +186,7 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                                             }}/>
                                     </Grid.Column>
                                     {previewDescription && <Grid.Column>
-                                        <ReactMarkdown source={snippetData.description}/>
+                                        <ReactMarkdown>{snippetData.description || ''}</ReactMarkdown>
                                     </Grid.Column>}
                                 </Grid.Row>
                             </Grid>
