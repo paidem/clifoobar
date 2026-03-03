@@ -19,10 +19,10 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-    def dispatch(self, request, *args, **kwargs):
-        if kwargs.get('pk') == 'current' and request.user:
-            kwargs['pk'] = request.user.pk
-        return super(UserViewSet, self).dispatch(request, *args, **kwargs)
+    def get_object(self):
+        if self.kwargs.get("pk") == "current":
+            return self.request.user
+        return super().get_object()
 
 
 # noinspection PyUnusedLocal
