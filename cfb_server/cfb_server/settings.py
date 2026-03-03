@@ -19,6 +19,17 @@ DEBUG = env.bool('DEBUG', default=False)
 
 ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=['*'])
 
+default_csrf_trusted_origins = []
+if DEBUG:
+    default_csrf_trusted_origins = [
+        'http://localhost:5173',
+        'http://127.0.0.1:5173',
+    ]
+CSRF_TRUSTED_ORIGINS = env.list(
+    'DJANGO_CSRF_TRUSTED_ORIGINS',
+    default=default_csrf_trusted_origins,
+)
+
 # Setup support for proxy headers
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
