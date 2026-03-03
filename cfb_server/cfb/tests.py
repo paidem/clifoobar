@@ -98,6 +98,22 @@ class BackendApiSmokeTests(APITestCase):
         created_snippet = Snippet.objects.get(pk=created_id)
         self.assertEqual(created_snippet.popularity, 1)
 
+    def test_snippet_create_accepts_stringified_tags_payload(self):
+        self.client.force_authenticate(user=self.user)
+        create_response = self.client.post(
+            "/api/snippets/",
+            {
+                "name": "Created snippet",
+                "description": "Created from test",
+                "body": "print('created')",
+                "language": "python",
+                "personal": False,
+                "tags": '["first","second"]',
+            },
+        )
+        self.assertEqual(create_response.status_code, 201)
+        self.assertEqual(create_response.data["tags"], ["first", "second"])
+
     def test_admin_login_logout_smoke(self):
         web_client = Client()
         login_page_response = web_client.get("/admin/login/")

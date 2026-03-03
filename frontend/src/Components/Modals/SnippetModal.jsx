@@ -23,6 +23,7 @@ import ModalBase from "./ModalBase";
 import {sortArrayOfObjects} from "../../Utils/sortArrayOfObjects";
 import {getCodeMirrorExtensions, getCodeMirrorTheme, getShowLineNumbers} from "../../Utils/CodeMirrorHelpers";
 import ReactMarkdown from "react-markdown";
+import {normalizeTags} from "../../Utils/normalizeTags";
 
 const snippetDefaultValues = {
     name: "",
@@ -41,7 +42,10 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
 
     // We HAVE to set empty array here, otherway we are reusing tags from previous snippt, as array are by reference
     // DO NOT optimize and DO NOT move "tags: []" to snippetDefaultValues
-    const [snippetData, setSnippetData] = useState((data && data.edit) ? data.snippet : {
+    const [snippetData, setSnippetData] = useState((data && data.edit) ? {
+        ...data.snippet,
+        tags: normalizeTags(data.snippet.tags),
+    } : {
         ...snippetDefaultValues,
         tags: []
     });
@@ -92,30 +96,27 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
         setDeleteConfirmationActive(false);
     };
 
-    // callbacks for all of Tagify's events:
-    const onTagifyAdd = e => {
-        setSnippetData(sd => {
-            sd.tags = sd.tags || []; // if sd.tags does not exist - create it
-            sd.tags.push(e.detail.data.value);
-            return sd;
-        });
+    const parseTagifyValue = (value) => {
+        if (!value) {
+            return [];
+        }
+        try {
+            const parsed = JSON.parse(value);
+            return normalizeTags(parsed.map(tag => tag?.value));
+        } catch (_) {
+            return normalizeTags(value);
+        }
     };
 
-    const onTagifyRemove = e => {
-        setSnippetData(sd => {
-            sd.tags.splice(sd.tags.indexOf(e.detail.data.value), 1);
-            return sd;
-        })
+    const onTagifyChange = (e) => {
+        setSnippetData(sd => ({
+            ...sd,
+            tags: parseTagifyValue(e?.detail?.value),
+        }));
     };
 
     const tagifySettings = {
         whitelist: appState.tags,
-        callbacks: {
-            add: onTagifyAdd,
-            remove: onTagifyRemove,
-            // input: onTagifyInput,
-            // invalid: onTagifyInvalid
-        }
     };
 
     return (
@@ -141,6 +142,7 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                                   className='tagsInput'
                                   name='tags'
                                   settings={tagifySettings}
+                                  onChange={onTagifyChange}
                                   defaultValue={data && data.snippet && data.snippet.tags && data.snippet.tags.join(', ')}
                             />
                         </Form.Field>

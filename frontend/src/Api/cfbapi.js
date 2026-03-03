@@ -1,4 +1,5 @@
 import axios from "axios";
+import {normalizeTags} from "../Utils/normalizeTags";
 
 export default class ClifoobarApi {
     apiInstance = axios.create({
@@ -66,18 +67,19 @@ export default class ClifoobarApi {
     }
 
     saveSnippet({name, description, body, language, personal, tags, id = null}, editMode = false) {
-        let bodyFormData = new FormData();
-        bodyFormData.set('name', name);
-        bodyFormData.set('description', description);
-        bodyFormData.set('body', body);
-        bodyFormData.set('tags', JSON.stringify(tags));
-        bodyFormData.set('language', language);
-        bodyFormData.set('personal', personal);
+        const payload = {
+            name,
+            description,
+            body,
+            language,
+            personal,
+            tags: normalizeTags(tags),
+        };
 
         if (editMode) {
-            return this.apiInstance.put("/snippets/" + id + "/", bodyFormData);
+            return this.apiInstance.put("/snippets/" + id + "/", payload);
         } else {
-            return this.apiInstance.post("/snippets/", bodyFormData);
+            return this.apiInstance.post("/snippets/", payload);
         }
     };
 

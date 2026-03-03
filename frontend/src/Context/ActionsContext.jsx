@@ -1,6 +1,7 @@
 import React, {useContext, useState} from 'react';
 import {AppContext} from "./AppContext";
 import {orderOptions} from "./Enums";
+import {normalizeTags} from "../Utils/normalizeTags";
 
 const ActionsContext = React.createContext([{}, () => {
 }]);
@@ -31,6 +32,7 @@ const ActionsProvider = (props) => {
                             snippets: response.data.results.map(s => ({
                                 ...s,
                                 created: new Date(s.created),
+                                tags: normalizeTags(s.tags),
                                 language: s.language ? s.language.toLowerCase() : ""
                             })),
                             snippetsTotal: response.data.count,
