@@ -60,6 +60,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 AUTH_USER_MODEL = 'users.User'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Taggit settings
 TAGGIT_CASE_INSENSITIVE = True
