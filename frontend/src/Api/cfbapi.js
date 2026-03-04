@@ -43,6 +43,10 @@ export default class ClifoobarApi {
         return this.apiInstance.get("/users/");
     }
 
+    getAuthConfig() {
+        return this.apiInstance.get("/auth/config");
+    }
+
     getCurrentUser() {
         return this.apiInstance.get("/users/current/");
     }
@@ -95,7 +99,7 @@ export default class ClifoobarApi {
         return this.apiInstance.get("/tags/");
     }
 
-    async login({username, password}) {
+    async loginLocal({username, password}) {
         let bodyFormData = new FormData();
         bodyFormData.set('username', username);
         bodyFormData.set('password', password);
@@ -105,10 +109,21 @@ export default class ClifoobarApi {
         return this.apiInstance.post("/admin/login/", bodyFormData, {baseURL: "/"});
     }
 
+    redirectToOAuthLogin(nextPath) {
+        const path = nextPath || `${window.location.pathname}${window.location.search}${window.location.hash}`;
+        window.location.assign(`/api/auth/oauth/login?next=${encodeURIComponent(path)}`);
+    }
+
     getLanguages () {
         return this.apiInstance.get("/languages/");
     }
-    logout() {
-        return this.apiInstance.get("/admin/logout/", {baseURL: "/"})
+
+    logoutLocal() {
+        return this.apiInstance.get("/admin/logout/", {baseURL: "/"});
+    }
+
+    redirectToAuthLogout(nextPath) {
+        const path = nextPath || `${window.location.pathname}${window.location.search}${window.location.hash}`;
+        window.location.assign(`/api/auth/logout?next=${encodeURIComponent(path)}`);
     }
 }

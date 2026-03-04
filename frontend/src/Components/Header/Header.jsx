@@ -74,7 +74,15 @@ function Header() {
                 </div>
                 <div style={{flexGrow: 1}}>
                     {(!appState.user && appState.showLogin) ?
-                        <LoginForm handleLoginSuccess={() => setAppState(s => ({...s, userLoginFailed: false, showLogin: false}))}/> :
+                        (appState.authMode === "oauth" ?
+                            <Button size='tiny'
+                                    color='blue'
+                                    onClick={() => appActions.login()}>
+                                Login with SSO
+                            </Button>
+                            :
+                            <LoginForm handleLoginSuccess={() => setAppState(s => ({...s, userLoginFailed: false, showLogin: false}))}/>
+                        ) :
                         <Input fluid size='small' icon placeholder='Search...'
                                autoFocus={true}
                                ref={appState.snippetsQueryInputRef}
@@ -136,7 +144,11 @@ function Header() {
                             </Button> :
                             <Button size='tiny'
                                     onClick={() => {
-                                        setAppState(s => ({...s, userLoginFailed: false, showLogin: !appState.showLogin}));
+                                        if (appState.authMode === "oauth") {
+                                            appActions.login();
+                                        } else {
+                                            setAppState(s => ({...s, userLoginFailed: false, showLogin: !appState.showLogin}));
+                                        }
                                     }}>
                                 {appState.showLogin ? "Cancel" : "Login"}
                             </Button>

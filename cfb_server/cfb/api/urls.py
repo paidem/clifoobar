@@ -13,4 +13,7 @@ router.register(r'languages', views.LanguageViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('snippets/<uuid:uuid>/vote', views.snippets_i_used_it_view),
+    path('auth/config', views.auth_config_view),
+    path('auth/oauth/login', views.oauth_login_view),
+    path('auth/logout', views.auth_logout_view),
 ]

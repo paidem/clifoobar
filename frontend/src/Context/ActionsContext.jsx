@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useMemo, useRef} from 'react';
 import {AppContext} from "./AppContext";
 import {orderOptions} from "./Enums";
 import {normalizeTags} from "../Utils/normalizeTags";
@@ -10,16 +10,22 @@ const ActionsContext = React.createContext([{}, () => {
 const ActionsProvider = (props) => {
     // App Context
     const [appState, setAppState] = useContext(AppContext);
+    const appStateRef = useRef(appState);
 
-    const updateAppState = (stateDiff) => {
+    useEffect(() => {
+        appStateRef.current = appState;
+    }, [appState]);
+
+    const updateAppState = useCallback((stateDiff) => {
         setAppState(state => ({...state, ...stateDiff}));
-    };
+    }, [setAppState]);
 
 
-    const updateSnippets = (props) => {
+    const updateSnippets = useCallback((props) => {
+        const state = appStateRef.current;
         updateAppState({snippetsLoading: true});
 
-        appState.api.getSnippets(
+        state.api.getSnippets(
             {
                 query: props.query,
                 page: props.page,
@@ -46,46 +52,41 @@ const ActionsProvider = (props) => {
             .finally(() => {
                 updateAppState({snippetsLoading: false});
             })
-    };
+    }, [updateAppState]);
 
-    const updateSettingsFromLocalStorage = () => {
+    const updateSettingsFromLocalStorage = useCallback(() => {
         setAppState(state => ({
             ...state,
             snippetsPageSize: localStorage.getItem("snippetsPageSize") || '10',
             snippetsOrder: localStorage.getItem("snippetsOrder") || orderOptions[0].value
         }));
-    };
+    }, [setAppState]);
 
-    const saveSnippet = (props, editMode) => {
-        return appState.api.saveSnippet(props, editMode);
-    };
+    const saveSnippet = useCallback((props, editMode) => {
+        return appStateRef.current.api.saveSnippet(props, editMode);
+    }, []);
 
-    const deleteSnippet = (id, callback) => {
-        return appState.api.deleteSnippet(id, callback);
-    };
-
-    const login = (props) => {
-        return appState.api.login(props)
+    const updateAuthConfig = useCallback(() => {
+        return appStateRef.current.api.getAuthConfig()
             .then(response => {
-                checkLoginStatus(5);
-                updateAppState({userLoginFailed: false});
+                updateAppState({
+                    authMode: response.data.mode || "local",
+                    oauthLoginUrl: response.data.oauth_login_url || null,
+                });
             })
-            .catch(error => {
-                updateAppState({userLoginFailed: true});
-            })
-    };
+            .catch(() => {
+                updateAppState({authMode: "local", oauthLoginUrl: null});
+            });
+    }, [updateAppState]);
 
-    const logout = () => {
-        appState.api.logout()
-            .then(response => {
-                updateAppState({user: null});
-            })
-    };
+    const deleteSnippet = useCallback((id, callback) => {
+        return appStateRef.current.api.deleteSnippet(id, callback);
+    }, []);
 
-    const checkLoginStatus = (retriesLeft) => {
+    const checkLoginStatus = useCallback((retriesLeft) => {
         retriesLeft--;
 
-        appState.api.getCurrentUser()
+        appStateRef.current.api.getCurrentUser()
             .then(r => {
                 setAppState(oldState => ({
                     ...oldState,
@@ -115,9 +116,39 @@ const ActionsProvider = (props) => {
                     }
                 }
             )
-    };
+    }, [setAppState]);
 
-    const openModal = ({type, data}) => {
+    const login = useCallback((props) => {
+        const state = appStateRef.current;
+        if (state.authMode === "oauth") {
+            state.api.redirectToOAuthLogin();
+            return Promise.resolve();
+        }
+
+        return state.api.loginLocal(props)
+            .then(response => {
+                checkLoginStatus(5);
+                updateAppState({userLoginFailed: false});
+            })
+            .catch(error => {
+                updateAppState({userLoginFailed: true});
+            })
+    }, [checkLoginStatus, updateAppState]);
+
+    const logout = useCallback(() => {
+        const state = appStateRef.current;
+        if (state.authMode === "oauth") {
+            state.api.redirectToAuthLogout();
+            return;
+        }
+
+        state.api.logoutLocal()
+            .then(response => {
+                updateAppState({user: null});
+            })
+    }, [updateAppState]);
+
+    const openModal = useCallback(({type, data}) => {
         let modal = React.createElement(type, props = {
                 data: data,
                 handleClose: () => {
@@ -127,10 +158,10 @@ const ActionsProvider = (props) => {
         );
 
         updateAppState({activeModal: modal});
-    };
+    }, [updateAppState]);
 
 
-    const voteForSnippet = async (snippet) => {
+    const voteForSnippet = useCallback(async (snippet) => {
         setAppState(state => {
             let updatedSnippet = snippet;
             updatedSnippet.popularity += 1;
@@ -138,10 +169,10 @@ const ActionsProvider = (props) => {
             return (state)
         });
 
-        await appState.api.voteForSnippet(snippet.id);
-    };
+        await appStateRef.current.api.voteForSnippet(snippet.id);
+    }, [setAppState]);
 
-    const addTagToSearch = (tag) => {
+    const addTagToSearch = useCallback((tag) => {
         setAppState(state => {
             let update = {};
 
@@ -159,25 +190,26 @@ const ActionsProvider = (props) => {
             update.snippetsActivePage = 1;
             return {...state, ...update};
         });
-    };
+    }, [setAppState]);
 
-    const updateTags = () => {
-        appState.api.getTags()
+    const updateTags = useCallback(() => {
+        appStateRef.current.api.getTags()
             .then(response => {
                 let tags = response.data.map(item => item.name);
                 updateAppState({tags: tags});
             })
-    };
+    }, [updateAppState]);
 
-    const updateLanguages = () => {
-        appState.api.getLanguages()
+    const updateLanguages = useCallback(() => {
+        appStateRef.current.api.getLanguages()
             .then(response => {
                 updateAppState({languages: response.data});
             })
-    };
+    }, [updateAppState]);
 
-    const defaultState = {
+    const actions = useMemo(() => ({
         addTagToSearch: addTagToSearch,
+        updateAuthConfig: updateAuthConfig,
         saveSnippet: saveSnippet,
         checkLoginStatus: checkLoginStatus,
         updateSnippets: updateSnippets,
@@ -189,12 +221,24 @@ const ActionsProvider = (props) => {
         logout: logout,
         voteForSnippet: voteForSnippet,
         deleteSnippet: deleteSnippet
-    };
-
-    const [state, setState] = useState(defaultState);
+    }), [
+        addTagToSearch,
+        updateAuthConfig,
+        saveSnippet,
+        checkLoginStatus,
+        updateSnippets,
+        updateSettingsFromLocalStorage,
+        updateTags,
+        updateLanguages,
+        openModal,
+        login,
+        logout,
+        voteForSnippet,
+        deleteSnippet,
+    ]);
 
     return (
-        <ActionsContext.Provider value={[state, setState]}>
+        <ActionsContext.Provider value={[actions, () => {}]}>
             {props.children}
         </ActionsContext.Provider>
     );

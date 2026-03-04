@@ -1,0 +1,2 @@
+-r requirements.txt
+mozilla-django-oidc==5.0.2

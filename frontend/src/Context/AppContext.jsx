@@ -27,6 +27,8 @@ const AppProvider = (props) => {
         user: null,
         userLoginFailed: false,
         showLogin: false,
+        authMode: "local",
+        oauthLoginUrl: null,
 
     };
 

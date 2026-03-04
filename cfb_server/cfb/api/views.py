@@ -1,5 +1,9 @@
 import uuid
+from urllib.parse import urlencode
 
+from django.conf import settings
+from django.shortcuts import redirect
+from django.urls import reverse
 from django.db.models import Q, F
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
@@ -144,3 +148,30 @@ class TagsViewSet(viewsets.ReadOnlyModelViewSet):
 class LanguageViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = LanguageSerializer
     queryset = Language.objects.all()
+
+
+@api_view(['GET'])
+def auth_config_view(request):
+    config = {
+        "mode": settings.AUTH_MODE,
+        "oauth": settings.AUTH_MODE == "oauth",
+        "oauth_login_url": "/api/auth/oauth/login" if settings.AUTH_MODE == "oauth" else None,
+    }
+    return Response(config)
+
+
+@api_view(['GET'])
+def oauth_login_view(request):
+    if settings.AUTH_MODE != "oauth":
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    next_url = request.query_params.get("next", "/")
+    return redirect(f"{reverse('oidc_authentication_init')}?{urlencode({'next': next_url})}")
+
+
+@api_view(['GET'])
+def auth_logout_view(request):
+    next_url = request.query_params.get("next", "/")
+    if settings.AUTH_MODE == "oauth":
+        return redirect(f"{reverse('oidc_logout')}?{urlencode({'next': next_url})}")
+    return redirect("/admin/logout/")

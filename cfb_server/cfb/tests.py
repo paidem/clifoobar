@@ -63,6 +63,11 @@ class BackendApiSmokeTests(APITestCase):
         language_codes = [item["code"] for item in languages_response.data]
         self.assertIn("python", language_codes)
 
+        auth_config_response = self.client.get("/api/auth/config")
+        self.assertEqual(auth_config_response.status_code, 200)
+        self.assertEqual(auth_config_response.data["mode"], "local")
+        self.assertEqual(auth_config_response.data["oauth"], False)
+
     def test_users_endpoints_require_and_respect_authentication(self):
         current_anon_response = self.client.get("/api/users/current/")
         self.assertIn(current_anon_response.status_code, [401, 403])
@@ -131,6 +136,9 @@ class BackendApiSmokeTests(APITestCase):
 
         logout_response = web_client.get("/admin/logout/", follow=False)
         self.assertIn(logout_response.status_code, [301, 302])
+
+        api_logout_response = web_client.get("/api/auth/logout", follow=False)
+        self.assertIn(api_logout_response.status_code, [301, 302])
 
     def test_snippets_list_without_trailing_slash_redirects(self):
         response = self.client.get("/api/snippets", follow=False)

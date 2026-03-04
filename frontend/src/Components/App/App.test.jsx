@@ -16,6 +16,7 @@ vi.mock("../Snippets/SnippetsList", () => ({
 describe("App", () => {
     it("renders and triggers initial app action calls", () => {
         const updateSettingsFromLocalStorage = vi.fn();
+        const updateAuthConfig = vi.fn();
         const checkLoginStatus = vi.fn();
         const updateSnippets = vi.fn();
         const updateTags = vi.fn();
@@ -32,6 +33,7 @@ describe("App", () => {
 
         const appActions = {
             updateSettingsFromLocalStorage,
+            updateAuthConfig,
             checkLoginStatus,
             updateSnippets,
             updateTags,
@@ -50,6 +52,7 @@ describe("App", () => {
         expect(screen.getByTestId("snippets-list")).toBeInTheDocument();
 
         expect(updateSettingsFromLocalStorage).toHaveBeenCalledTimes(1);
+        expect(updateAuthConfig).toHaveBeenCalledTimes(1);
         expect(checkLoginStatus).toHaveBeenCalledWith(10);
         expect(updateSnippets).toHaveBeenCalledTimes(1);
         expect(updateTags).toHaveBeenCalledTimes(1);

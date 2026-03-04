@@ -16,6 +16,10 @@ function App() {
     }, [appActions]);
 
     useEffect(() => {
+        appActions.updateAuthConfig();
+    }, [appActions]);
+
+    useEffect(() => {
         appActions.checkLoginStatus(10);
     }, [appActions]);
 

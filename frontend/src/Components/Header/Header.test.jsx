@@ -16,6 +16,7 @@ function HeaderHarness({ initialPath }) {
         snippetsQueryInputRef: useRef(),
         snippetsOrder: "-popularity",
         snippetsPageSize: "10",
+        authMode: "local",
     });
 
     const appActions = {

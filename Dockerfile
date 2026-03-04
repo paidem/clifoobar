@@ -35,12 +35,11 @@ RUN apk update && apk add \
     musl-dev \
     postgresql-dev \
     python3-dev \
-    libffi-dev \
-    openldap-dev
+    libffi-dev
 
 COPY cfb_server/requirements*.txt ./
 RUN pip install --upgrade pip && \
-    pip wheel --no-cache-dir --wheel-dir /usr/src/app/wheels -r requirements-ldap.txt
+    pip wheel --no-cache-dir --wheel-dir /usr/src/app/wheels -r requirements-auth.txt
 
 #########
 # FINAL #
@@ -54,7 +53,6 @@ COPY --from=builder-wheels /usr/src/app/wheels /wheels
 RUN apk update && apk add --no-cache \
       bash \
       libpq \
-      libldap \
       ca-certificates \
       openssl \
       memcached \
