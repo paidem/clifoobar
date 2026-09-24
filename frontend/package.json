@@ -18,7 +18,7 @@
     "@codemirror/lang-yaml": "latest",
     "@codemirror/theme-one-dark": "latest",
     "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.3.0",
+    "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.1",
     "@uiw/react-codemirror": "latest",
     "@yaireo/tagify": "^4.35.4",
@@ -33,10 +33,10 @@
     "web-vitals": "^4.2.4"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.4",
+    "@vitejs/plugin-react": "^6.1.1",
     "jsdom": "^25.0.1",
-    "vite": "^5.4.14",
-    "vitest": "^2.1.8"
+    "vite": "^8.3.1",
+    "vitest": "^5.0.1"
   },
   "scripts": {
     "start": "vite",

@@ -13,6 +13,10 @@ export default defineConfig(({ mode }) => {
                 include: /\.(js|jsx|ts|tsx)$/,
             }),
         ],
+        // semantic-ui-css ships selectors lightningcss rejects (`:after .header`); drop them instead of failing the build
+        css: {
+            lightningcss: { errorRecovery: true },
+        },
         define: {
             "process.env.REACT_APP_VERSION": JSON.stringify(
                 env.REACT_APP_VERSION || env.VITE_APP_VERSION || ""
