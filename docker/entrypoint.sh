@@ -45,6 +45,10 @@ END
 # copy static files
 python ./manage.py collectstatic --no-input
 
+# gunicorn runs as 'app': default SQLite DB (and its journal, created next to it) must be writable
+chown app:app /app
+[ -f /app/db.sqlite3 ] && chown app:app /app/db.sqlite3
+
 # Set CACHE_URL to use memcached via sock file
 export CACHE_URL=memcache:///tmp/memcached.sock
 

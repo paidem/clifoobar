@@ -3,6 +3,7 @@
 **/.git
 frontend/build
 */venv
+*/.venv
 */.env
 */db.sqlite3
 

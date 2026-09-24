@@ -5,13 +5,12 @@ ARG SERVERFROM=python:3.12-alpine
 # BUILDER FRONTEND #
 ####################
 
-FROM ${BUILDFRONTENDFROM} as builder-frontend
+FROM ${BUILDFRONTENDFROM} AS builder-frontend
 ARG DOCKER_TAG
-ADD frontend/package.json /frontend/
-ADD frontend/package-lock.json /frontend/
+COPY frontend/package.json frontend/package-lock.json /frontend/
 WORKDIR /frontend
 RUN npm install
-ADD frontend /frontend
+COPY frontend /frontend
 ENV REACT_APP_VERSION=$DOCKER_TAG
 RUN npm run build
 
@@ -19,7 +18,7 @@ RUN npm run build
 # BUILDER WHEELS #
 ##################
 
-FROM ${SERVERFROM} as builder-wheels
+FROM ${SERVERFROM} AS builder-wheels
 
 # set work directory
 WORKDIR /usr/src/app
@@ -29,7 +28,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # install psycopg2 dependencies
-RUN apk update && apk add \
+RUN apk add --no-cache \
     build-base \
     ca-certificates \
     musl-dev \
@@ -47,10 +46,8 @@ RUN pip install --upgrade pip && \
 
 FROM ${SERVERFROM}
 
-COPY --from=builder-wheels /usr/src/app/wheels /wheels
-
 # install dependencies
-RUN apk update && apk add --no-cache \
+RUN apk add --no-cache \
       bash \
       libpq \
       ca-certificates \
@@ -71,19 +68,15 @@ COPY cfb_server  /app
 COPY --from=builder-frontend /frontend/dist /frontend
 
 # Inject docker specific configuration
-COPY docker /tmp/docker
+COPY --chmod=755 docker/entrypoint.sh /entrypoint.sh
+COPY docker/nginx-default.conf /etc/nginx/http.d/default.conf
+COPY docker/supervisor-app.ini /etc/supervisor.d/
+COPY docker/supervisord.conf /etc/supervisord.conf
 
-# Distribute configuration files and prepare dirs for pidfiles
-RUN mkdir -p /run/nginx && \
-    mkdir -p /run/gunicorn && \
-    cd /tmp/docker && \
-    mv entrypoint.sh /entrypoint.sh && \
-    chmod +x /entrypoint.sh && \
-    mv nginx-default.conf /etc/nginx/http.d/default.conf && \
-    mkdir -p /etc/supervisor.d/ && \
-    mv /tmp/docker/supervisor-app.ini /etc/supervisor.d/ && \
-    mv /tmp/docker/supervisord.conf /etc/supervisord.conf && \
-    # create /app/.env if doesn't exists for less noise from django-environ
+# Unprivileged user for gunicorn and memcached (supervisord stays root as PID 1),
+# pidfile dirs, and /app/.env so django-environ doesn't warn
+RUN addgroup -S app && adduser -S -G app -H -s /sbin/nologin app && \
+    mkdir -p /run/nginx /run/gunicorn && \
     touch /app/.env
 
 ENTRYPOINT ["/entrypoint.sh"]
@@ -92,5 +85,6 @@ ENTRYPOINT ["/entrypoint.sh"]
 WORKDIR /app
 
 CMD ["supervisord", "-n"]
+HEALTHCHECK --start-period=60s CMD wget -q --spider http://127.0.0.1/api/ || exit 1
 EXPOSE 80
 EXPOSE 443
