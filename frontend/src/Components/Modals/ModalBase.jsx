@@ -1,7 +1,7 @@
 import React from 'react';
 import {Modal} from "semantic-ui-react";
 
-function ModalBase({children, handleClose, size, style, className}) {
+function ModalBase({children, handleClose, size, style, className, closeOnEscape = false}) {
     return (
         <Modal
             open={true}
@@ -9,7 +9,7 @@ function ModalBase({children, handleClose, size, style, className}) {
             size={size || 'small'}
             centered={false}
             closeOnDimmerClick={false}
-            closeOnEscape={false}
+            closeOnEscape={closeOnEscape}
             style={style}
             className={className}
         >

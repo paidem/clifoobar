@@ -49,6 +49,20 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
         ...snippetDefaultValues,
         tags: []
     });
+    const [initialData] = useState(snippetData);
+    const [unsavedWarning, setUnsavedWarning] = useState(false);
+
+    const handleEscape = (e) => {
+        // Escape inside language dropdown / tags input only closes their menus
+        if (e && e.target && e.target.closest && e.target.closest('.ui.dropdown, .tagify')) {
+            return;
+        }
+        if (JSON.stringify(snippetData) === JSON.stringify(initialData)) {
+            handleClose();
+        } else {
+            setUnsavedWarning(true);
+        }
+    };
 
     const handleApiError = (error) => {
         if (error.response && error.response.data && error.response.data.detail) {
@@ -120,7 +134,7 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
     };
 
     return (
-        <ModalBase size="fullscreen" handleClose={handleClose} className={snippetData.personal ? 'personal' : ''}>
+        <ModalBase size="fullscreen" handleClose={handleEscape} closeOnEscape className={snippetData.personal ? 'personal' : ''}>
             <Header icon='file code outline'
                     content={(data && data.edit ? 'Edit ' : 'New ') + (snippetData.personal ? 'personal ' : '') + 'snippet'}
             />
@@ -229,6 +243,9 @@ function SnippetModal({handleClose, data = {edit: false, snippet: {}}}) {
                         />
 
                     </Form.Field>
+                    {unsavedWarning &&
+                    <Message warning visible icon='warning sign'
+                             content='You have unsaved changes. Save them, or press Cancel to discard.'/>}
                     <Container fluid style={{display: "flex", justifyContent: "space-between"}}>
                         <div>
                             <Button type='submit' color='green'>

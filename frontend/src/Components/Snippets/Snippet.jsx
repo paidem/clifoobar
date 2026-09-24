@@ -1,9 +1,10 @@
 import React, {useContext, useRef, useState} from 'react';
-import {Button, Card, Divider, Grid, Label} from "semantic-ui-react";
+import {Button, Card, Divider, Grid, Icon, Label} from "semantic-ui-react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import {ActionsContext} from "../../Context/ActionsContext";
 import SnippetModal from "../Modals/SnippetModal";
+import EditCopyModal from "../Modals/EditCopyModal";
 import {AppContext} from "../../Context/AppContext";
 import CodeMirror from "@uiw/react-codemirror";
 import './Snippet.css'
@@ -183,9 +184,10 @@ function Snippet({snippet}) {
                                     }
                                 </div>
 
+                                <div style={{display: "flex", flexDirection: "column", alignItems: "stretch", marginLeft: "5px", gap: "5px"}}>
                                 <Button
-                                    style={{marginLeft: "5px"}}
                                     color='orange'
+                                    style={{marginRight: 0}}
                                     content=''
                                     compact
                                     icon={copyButtonIcon}
@@ -198,6 +200,20 @@ function Snippet({snippet}) {
                                     onClick={() => copyToClipboard(snippet.body)}
                                     size='medium'
                                 />
+                                <Button
+                                    color='orange'
+                                    compact
+                                    style={{marginRight: 0}}
+                                    title='Edit before copying'
+                                    onClick={() => appActions.openModal({
+                                        type: EditCopyModal,
+                                        data: {snippet: snippet, onCopy: copyToClipboard},
+                                    })}
+                                    size='medium'
+                                >
+                                    <Icon name='pencil' style={{margin: "0 4px 0 0"}}/>+<Icon name='copy outline' style={{margin: "0 0 0 4px"}}/>
+                                </Button>
+                                </div>
 
                             </div>
                         </React.Fragment>
