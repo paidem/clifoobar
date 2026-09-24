@@ -56,7 +56,7 @@ function App() {
                 <img src='favicon.ico' alt="logo"/>
                 CLI Foo Bar
                 <Label.Detail>
-                    {import.meta.env.VITE_APP_VERSION || import.meta.env.REACT_APP_VERSION}
+                    {process.env.REACT_APP_VERSION}
                 </Label.Detail>
             </Label>
             </Router>
