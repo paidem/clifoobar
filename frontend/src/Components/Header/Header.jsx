@@ -5,7 +5,7 @@ import {Button, Dropdown, Icon, Input, Label, Segment, SegmentGroup} from "seman
 import SnippetModal from "../Modals/SnippetModal";
 import LoginForm from "./LoginForm";
 import {orderOptions, pageSizeOptions} from "../../Context/Enums";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router";
 
 function Header() {
     // Context
