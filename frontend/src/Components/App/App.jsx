@@ -4,7 +4,7 @@ import SnippetsList from "../Snippets/SnippetsList";
 import Header from "../Header/Header";
 import {Container, Label} from "semantic-ui-react";
 import {ActionsContext} from "../../Context/ActionsContext";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router";
 
 function App() {
     // Context
